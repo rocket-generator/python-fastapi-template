@@ -1,0 +1,6 @@
+from ..models import {{ .Name.Singular.Title }}
+from .base_repository import BaseRepository
+
+
+class {{ .Name.Singular.Title }}Repository(BaseRepository):
+    model = {{ .Name.Singular.Title }}

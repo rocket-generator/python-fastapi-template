@@ -1,0 +1,2 @@
+# FastAPI Template for Rocket
+

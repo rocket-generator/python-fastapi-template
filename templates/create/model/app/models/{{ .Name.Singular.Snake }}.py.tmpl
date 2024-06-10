@@ -1,0 +1,45 @@
+from sqlalchemy import TIMESTAMP, BigInteger, Column, Integer, String, event
+from sqlalchemy.sql import func, text
+{{- if .Authenticatable }}
+from starlette.authentication import BaseUser
+{{- end }}
+
+from ..libraries import Hash
+from .base import Base
+from .types import UUID
+
+
+class {{ .Name.Singular.Title }}(Base{{ if .Authenticatable }}, BaseUser{{ end }}):
+    __tablename__ = '{{ .Name.Original }}'
+    id = Column(UUID,
+                primary_key=True,
+                server_default=text('gen_random_uuid()'))
+
+{{- range .Columns}}
+{{- if not .Primary }}
+{{- if not .IsSystemUseColumn }}
+    {{ .Name.Original }} = Column(String, nullable=False)
+{{- end }}
+{{- end }}
+{{- end }}
+    updated_at = Column(TIMESTAMP(timezone=True),
+                        nullable=False,
+                        onupdate=func.now(),
+                        server_default=func.now())
+    created_at = Column(TIMESTAMP(timezone=True),
+                        nullable=False,
+                        server_default=func.now())
+
+{{- if .Authenticatable }}
+    @property
+    def is_authenticated(self) -> bool:
+        raise NotImplementedError()  # pragma: no cover
+
+    @property
+    def display_name(self) -> str:
+        return self.name
+
+    @property
+    def identity(self) -> str:
+        return str(self.id)
+{{- end }}
