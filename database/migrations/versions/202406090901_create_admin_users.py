@@ -19,6 +19,8 @@ down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
+# uuid_blob(uuid())
+# gen_random_uuid()
 
 def upgrade() -> None:
     op.create_table(

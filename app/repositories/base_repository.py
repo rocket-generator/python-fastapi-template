@@ -1,6 +1,8 @@
+from typing import Any, Dict
+
 from injector import Injector, inject
 from sqlalchemy.orm import scoped_session
-from typing import Any, Dict
+
 from ..models import Base
 
 

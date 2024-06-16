@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 from typing import Union
 
 from dotenv import load_dotenv
@@ -9,12 +10,16 @@ load_dotenv()
 
 
 class Config(BaseSettings):
+    ENVIRONMENT: str = os.getenv("ENVIRONMENT", "development")
+
+    DB_DRIVER: str = os.getenv("DB_DRIVER", "postgresql")
     DB_USERNAME: str = os.getenv("DB_USERNAME", "postgres")
     DB_PASSWORD: str = os.getenv("DB_PASSWORD", "")
     DB_HOST: Union[AnyHttpUrl,
                    IPvAnyAddress] = os.getenv("DB_HOST", "127.0.0.1")
     DB_NAME: str = os.getenv("DB_NAME", "")
-    SQLALCHEMY_DATABASE_URI: str = f"postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
+
+    SQLALCHEMY_DATABASE_URI: str = f"{DB_DRIVER}://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
 
     AWS_ACCESS_ID: str = os.getenv("AWS_ACCESS_ID", "")
     AWS_ACCESS_SECRET: str = os.getenv("AWS_ACCESS_SECRET", "")
@@ -25,5 +30,16 @@ class Config(BaseSettings):
     JWT_ALGORITHM: str = os.getenv("JWT_ALGORITHM", "HS256")
     JWT_EXPIRE_MINUTES: int = int(os.getenv("JWT_EXPIRE_MINUTES", "120"))
 
+    def __init__(self, environment: str = 'local', **kwargs):
+        _env = os.getenv("ENVIRONMENT", "unknown")
+        print(f'Environment name: {_env}')
+        super().__init__(**kwargs)
+        database_uri = f"{self.DB_DRIVER}://{self.DB_USERNAME}:{self.DB_PASSWORD}@{self.DB_HOST}/{self.DB_NAME}"
+        if self.DB_DRIVER == "sqlite":
+            database_uri = f"{self.DB_DRIVER}:///{self.DB_NAME}"
+        print(f'DB variables for {database_uri} environment')
 
-config = Config(_env_file='.env', _env_file_encoding='utf-8')
+        self.SQLALCHEMY_DATABASE_URI = database_uri
+
+
+config = Config()

@@ -1,6 +1,7 @@
+from typing import Type, cast
+
 from ..models.admin_user import AdminUser
 from .base_repository import BaseRepository
-from typing import cast, Type
 
 
 class AdminUserRepository(BaseRepository):

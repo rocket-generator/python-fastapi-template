@@ -1,7 +1,7 @@
 import uuid
 
 from sqlalchemy.dialects.postgresql import UUID as PostgresUUID
-from sqlalchemy.types import CHAR, TypeDecorator
+from sqlalchemy.types import BLOB, CHAR, TypeDecorator
 
 
 # https://gist.github.com/gmolveau/7caeeefe637679005a7bb9ae1b5e421e
@@ -12,9 +12,13 @@ class UUID(TypeDecorator):
     """
     impl = CHAR
 
+    cache_ok = False
+
     def load_dialect_impl(self, dialect):
         if dialect.name == 'postgresql':
             return dialect.type_descriptor(PostgresUUID())
+        elif dialect.name == 'sqlite':
+            return dialect.type_descriptor(BLOB(32))
         else:
             return dialect.type_descriptor(CHAR(32))
 

@@ -3,10 +3,11 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
 from ..config import Config, config
-from ..libraries import Hash, JWT
+from ..http.middlewares.auth.admin_authentication_backend import \
+    AdminAuthenticationBackend
+from ..libraries import JWT, Hash
 from ..repositories.admin_user_repository import AdminUserRepository
 from ..services.admin_user_service import AdminUserService
-from ..http.middlewares.auth.admin_authentication_backend import AdminAuthenticationBackend
 
 
 def build_container() -> Injector:
@@ -17,11 +18,10 @@ def configure(binder: Binder):
     binder.bind(Config, to=config, scope=singleton)
 
     engine = create_engine(config.SQLALCHEMY_DATABASE_URI, echo=True)
-    session_factory = sessionmaker(autocommit=False,
-                                   autoflush=False,
-                                   bind=engine)
+    engine = engine.execution_options(isolation_level="AUTOCOMMIT")
+    session_factory = sessionmaker(autoflush=True, bind=engine)
     db = scoped_session(session_factory)
-    binder.bind(scoped_session, to=db)
+    binder.bind(scoped_session, to=db, scope=singleton)
 
     # Libraries
     _hash = Hash()
@@ -38,9 +38,14 @@ def configure(binder: Binder):
     admin_user_service = AdminUserService(admin_user_repository,
                                           _hash=_hash,
                                           _jwt=_jwt,
+                                          _db=db,
                                           _config=config)
     binder.bind(AdminUserService, to=admin_user_service)
 
     # Middlewares
     admin_authentication_backend = AdminAuthenticationBackend(
-        _admin_user_service=admin_user_service, _jwt=_jwt, _config=config)
+        _admin_user_service=admin_user_service,
+        _jwt=_jwt,
+        _db=db,
+        _config=config)
+    binder.bind(AdminAuthenticationBackend, to=admin_authentication_backend)

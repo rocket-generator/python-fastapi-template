@@ -1,5 +1,7 @@
 import click
 from database.seeds import seed as seeder
+from alembic.config import Config
+from alembic import command
 
 
 @click.group()
@@ -15,7 +17,8 @@ def db():
 @db.command()
 def migrate():
     click.echo('Initialized the database')
-
+    alembic_cfg = Config("alembic.ini")
+    command.upgrade(alembic_cfg, "head")
 
 @db.command()
 def seed():

@@ -1,18 +1,18 @@
 from fastapi import APIRouter, HTTPException, Request
-from injector import Binder, Injector, InstanceProvider, singleton
-from ..responses.status import Status
+
 from ...services.admin_user_service import AdminUserService
+from ..responses.status import Status
 
 router = APIRouter(
     tags=["health"],
-    responses={404: {
-        "description": "Not found"
-    }},
+    responses={
+        404: Status(success=False, message="Not found").model_dump(),
+    },
 )
 
 
 @router.get("/")
-async def signin() -> Status:
+async def index() -> Status:
     return Status(success=True, message="ok")
 
 

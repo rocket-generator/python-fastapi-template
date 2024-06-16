@@ -1,5 +1,8 @@
-from jose import jwt, JWTError
 from datetime import datetime, timedelta, timezone
+from typing import Optional
+
+from jose import ExpiredSignatureError, JWTError, jwt
+
 from app.config import config
 from app.exceptions.client_side_exception import ClientSideException
 
@@ -22,10 +25,12 @@ class JWT(object):
         return encoded_jwt
 
     @staticmethod
-    def extract_from_jwt(token: str) -> dict:
+    def extract_from_jwt(token: str) -> Optional[dict]:
         try:
             return jwt.decode(token,
                               config.JWT_SECRET,
                               algorithms=[config.JWT_ALGORITHM])
+        except ExpiredSignatureError as e:
+            return None
         except JWTError as e:
             raise ClientSideException(f"JWT Error: {e}")
