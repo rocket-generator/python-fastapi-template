@@ -1,0 +1,36 @@
+services:
+  app:
+    container_name: app
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    command: poetry run python manage.py serve
+    ports:
+      - 8100:8100
+    depends_on:
+      - postgres
+    environment:
+      - ENVIRONMENT=local
+      - DB_DRIVER=postgresql
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+      - DB_HOST=postgres
+      - DB_NAME=fastapi_template
+      - JWT_SECRET=important_secret
+      - JWT_ALGORITHM=HS256
+      - JWT_EXPIRE_MINUTES=1440
+  postgres:
+    image: postgres:15
+    environment:
+      TZ: Asia/Tokyo
+      POSTGRES_DB: fastapi_template
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432

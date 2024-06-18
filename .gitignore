@@ -34,3 +34,8 @@ README.rst
 .pypirc
 
 .env
+
+postgres_data
+
+
+
