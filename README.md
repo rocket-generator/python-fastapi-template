@@ -1,7 +1,14 @@
 # FastAPI Template for Rocket
 
-## Setup for trial
+## Setup with docker compose for local environment
 
+- docker compose up -d
+- docker-compose exec app poetry run python manage.py db migrate
+- docker-compose exec app poetry run python manage.py db seed
+- access http://localhost:8100/
+
+
+## Run on local environment 
 - use Python 3.12 or later
 - install poetry by running `pip install poetry`
 - clone this repository
