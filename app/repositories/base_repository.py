@@ -1,3 +1,4 @@
+from abc import ABCMeta, abstractmethod
 from typing import Any, Dict
 
 from injector import Injector, inject
@@ -6,8 +7,12 @@ from sqlalchemy.orm import scoped_session
 from ..models import Base
 
 
-class BaseRepository(object):
-    model: Base = Base
+class BaseRepository(metaclass=ABCMeta):
+
+    @property
+    @abstractmethod
+    def model(self):
+        raise NotImplementedError
 
     @inject
     def __init__(self, db: scoped_session):
@@ -23,10 +28,21 @@ class BaseRepository(object):
         return self._db.query(self.model).filter(self.model.id == _id).first()
 
     def create(self, data: Dict[str, Any]) -> model:
-        pass
+        instance = self.model(**data)
+        self._db.add(instance)
+        self._db.commit()
+        return instance
 
     def update(self, _id: str, data: Dict[str, Any]) -> model:
-        pass
+        instance = self.get_by_id(_id)
+        if instance:
+            for key, value in data.items():
+                setattr(instance, key, value)
+            self._db.commit()
+        return instance
 
     def delete(self, _id: str) -> None:
-        pass
+        instance = self.get_by_id(_id)
+        if instance:
+            self._db.delete(instance)
+            self._db.commit()

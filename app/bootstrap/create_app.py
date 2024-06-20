@@ -4,10 +4,12 @@ from fastapi.middleware.gzip import GZipMiddleware
 from injector import Injector
 from starlette.middleware.authentication import AuthenticationMiddleware
 
-from app.http.controllers.admin_auth_controller import \
-    router as admin_auth_controller
 from app.http.controllers.admin_get_me_controller import \
     router as admin_get_me_controller
+from app.http.controllers.admin_post_auth_signin_controller import \
+    router as admin_post_auth_signin_controller
+from app.http.controllers.admin_put_me_controller import \
+    router as admin_put_me_controller
 from app.http.controllers.health_controller import router as health_controller
 from app.http.middlewares.auth.admin_authentication_backend import \
     AdminAuthenticationBackend
@@ -45,6 +47,7 @@ def _setup_middleware(app: FastAPI, injector: Injector) -> FastAPI:
 
 def _setup_router(app: FastAPI, injector: Injector) -> FastAPI:
     app.include_router(health_controller)
-    app.include_router(admin_auth_controller)
+    app.include_router(admin_post_auth_signin_controller)
     app.include_router(admin_get_me_controller)
+    app.include_router(admin_put_me_controller)
     return app

@@ -5,6 +5,8 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 from ..config import Config, config
 from ..http.middlewares.auth.admin_authentication_backend import \
     AdminAuthenticationBackend
+from ..interfaces.services.admin_user_service_interface import \
+    AdminUserServiceInterface
 from ..libraries import JWT, Hash
 from ..repositories.admin_user_repository import AdminUserRepository
 from ..services.admin_user_service import AdminUserService
@@ -32,7 +34,7 @@ def configure(binder: Binder):
 
     # Repositories
     admin_user_repository = AdminUserRepository(db)
-    binder.bind(AdminUserRepository, to=admin_user_repository)
+    binder.bind(AdminUserServiceInterface, to=admin_user_repository)
 
     # Services
     admin_user_service = AdminUserService(admin_user_repository,

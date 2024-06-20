@@ -4,12 +4,14 @@ from injector import Injector, inject
 from sqlalchemy.orm import scoped_session
 
 from ..config import Config
+from ..interfaces.services.admin_user_service_interface import \
+    AdminUserServiceInterface
 from ..libraries import JWT, Hash
 from ..models.admin_user import AdminUser
 from ..repositories.admin_user_repository import AdminUserRepository
 
 
-class AdminUserService(object):
+class AdminUserService(AdminUserServiceInterface):
 
     @inject
     def __init__(self, admin_user_repository: AdminUserRepository, _hash: Hash,
