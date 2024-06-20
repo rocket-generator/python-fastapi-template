@@ -5,11 +5,19 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 from ..config import Config, config
 from ..http.middlewares.auth.admin_authentication_backend import \
     AdminAuthenticationBackend
+from ..interfaces.repositories.admin_user_repository_interface import \
+    AdminUserRepositoryInterface
 from ..interfaces.services.admin_user_service_interface import \
     AdminUserServiceInterface
+from ..interfaces.usecases.get_admin_me_usecase_interface import \
+    GetAdminMeUsecaseInterface
+from ..interfaces.usecases.put_admin_me_usecase_interface import \
+    PutAdminMeUsecaseInterface
 from ..libraries import JWT, Hash
 from ..repositories.admin_user_repository import AdminUserRepository
 from ..services.admin_user_service import AdminUserService
+from ..usecases.get_admin_me_usecase import GetAdminMeUsecase
+from ..usecases.put_admin_me_usecase import PutAdminMeUsecase
 
 
 def build_container() -> Injector:
@@ -34,7 +42,7 @@ def configure(binder: Binder):
 
     # Repositories
     admin_user_repository = AdminUserRepository(db)
-    binder.bind(AdminUserServiceInterface, to=admin_user_repository)
+    binder.bind(AdminUserRepositoryInterface, to=admin_user_repository)
 
     # Services
     admin_user_service = AdminUserService(admin_user_repository,
@@ -42,7 +50,16 @@ def configure(binder: Binder):
                                           _jwt=_jwt,
                                           _db=db,
                                           _config=config)
-    binder.bind(AdminUserService, to=admin_user_service)
+    binder.bind(AdminUserServiceInterface, to=admin_user_service)
+
+    # UseCases
+    put_admin_user_use_case = PutAdminMeUsecase(
+        admin_user_service=admin_user_service)
+    binder.bind(PutAdminMeUsecaseInterface, to=put_admin_user_use_case)
+
+    get_admin_user_use_case = GetAdminMeUsecase(
+        admin_user_service=admin_user_service)
+    binder.bind(GetAdminMeUsecaseInterface, to=get_admin_user_use_case)
 
     # Middlewares
     admin_authentication_backend = AdminAuthenticationBackend(

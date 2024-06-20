@@ -1,10 +1,11 @@
 from fastapi import APIRouter, HTTPException, Request
 from starlette.authentication import requires
 
-from app.http.requests.update_me import UpdateMe
-from app.http.responses.admin_me import AdminMe
-from app.http.responses.status import Status
-from app.services.admin_user_service import AdminUserService
+from ...http.requests.update_me import UpdateMe
+from ...http.responses.admin_me import AdminMe
+from ...http.responses.status import Status
+from ...interfaces.usecases.put_admin_me_usecase_interface import \
+    PutAdminMeUsecaseInterface
 
 router = APIRouter(
     prefix="/admin",
@@ -19,8 +20,8 @@ router = APIRouter(
 
 @router.put("/me")
 @requires(["admin_authenticated"])
-async def admin_put_me(request: Request, credential: UpdateMe) -> AdminMe:
-    admin_user_service = request.app.state.injector.get(AdminUserService)
+async def admin_put_me(request: Request, data: UpdateMe) -> AdminMe:
+    usecase = request.app.state.injector.get(PutAdminMeUsecaseInterface)
     me = request.user
-    me = admin_user_service.update_me(me, credential.model_dump())
+    me = usecase.handle(me.id, data.model_dump())
     return AdminMe.from_model(me)

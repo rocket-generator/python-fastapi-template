@@ -4,6 +4,7 @@ from injector import Injector, inject
 from sqlalchemy.orm import scoped_session
 
 from ..config import Config
+from ..exceptions import ClientSideError
 from ..interfaces.services.admin_user_service_interface import \
     AdminUserServiceInterface
 from ..libraries import JWT, Hash
@@ -49,3 +50,20 @@ class AdminUserService(AdminUserServiceInterface):
         admin_user = self._admin_user_repository.get_by_id(admin_user_id)
 
         return admin_user
+
+    def get_admin_user_by_id(self, id: str) -> Optional[AdminUser]:
+        admin_user = self._admin_user_repository.get_by_id(id)
+        return admin_user
+
+    def update_admin_user(self, admin_user_id: str,
+                          admin: dict) -> Optional[AdminUser]:
+        admin_user = self._admin_user_repository.get_by_id(admin_user_id)
+        if admin_user is None:
+            raise ClientSideError("Admin user not found")
+
+        if "password" in admin:
+            admin["password"] = self._hash.generate_hash(admin["password"])
+
+        updated_admin_user = self._admin_user_repository.update(
+            admin_user_id, admin)
+        return updated_admin_user

@@ -1,3 +1,3 @@
-from .client_side_exception import ClientSideException
-from .external_service_exception import ExternalServiceException
-from .server_side_exception import ServerSideException
+from .client_side_error import ClientSideError
+from .external_service_error import ExternalServiceError
+from .server_side_error import ServerSideError

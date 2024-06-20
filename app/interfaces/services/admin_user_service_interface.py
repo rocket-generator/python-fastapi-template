@@ -19,3 +19,12 @@ class AdminUserServiceInterface(metaclass=ABCMeta):
     def get_admin_user_by_token(self,
                                 access_token: str) -> Optional[AdminUser]:
         raise NotImplementedError
+
+    @abstractmethod
+    def get_admin_user_by_id(self, id: str) -> Optional[AdminUser]:
+        raise NotImplementedError
+
+    @abstractmethod
+    def update_admin_user(self, admin_user_id: str,
+                          admin: dict) -> Optional[AdminUser]:
+        raise NotImplementedError
