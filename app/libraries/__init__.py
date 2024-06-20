@@ -1,2 +1,2 @@
 from .hash import Hash
-from .jwt import JWT
+from .access_token import JWT

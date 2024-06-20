@@ -6,8 +6,11 @@ WORKDIR /app
 
 COPY pyproject.toml ./
 RUN pip install poetry
-RUN poetry config virtualenvs.create false
-RUN poetry install
+#RUN poetry config virtualenvs.create false
+#RUN poetry config virtualenvs.in-project false
+RUN poetry update
+#RUN poetry export --without-hashes --format=requirements.txt > requirements.txt
+#RUN pip install -r requirements.txt
 
 ENV LANG C.UTF-8
 ENV TZ Asia/Tokyo

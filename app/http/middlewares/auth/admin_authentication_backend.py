@@ -4,7 +4,7 @@ from starlette.authentication import (AuthCredentials, AuthenticationBackend,
                                       AuthenticationError, SimpleUser)
 
 from ....config import Config
-from ....libraries.jwt import JWT
+from ....libraries.access_token import JWT
 from ....services.admin_user_service import AdminUserService
 
 

@@ -1,7 +1,8 @@
 from datetime import datetime, timedelta, timezone
 from typing import Optional
 
-import jwt
+from jose import jwt, exceptions
+
 
 from app.config import config
 from app.exceptions.client_side_error import ClientSideError
@@ -30,7 +31,7 @@ class JWT(object):
             return jwt.decode(token,
                               config.JWT_SECRET,
                               algorithms=[config.JWT_ALGORITHM])
-        except jwt.exceptions.ExpiredSignatureError as e:
+        except exceptions.ExpiredSignatureError as e:
             return None
-        except jwt.exceptions.PyJWTError as e:
+        except exceptions.JWTError as e:
             raise ClientSideError(f"JWT Error: {e}")

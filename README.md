@@ -3,8 +3,8 @@
 ## Setup with docker compose for local environment
 
 - docker compose up -d
-- docker-compose exec app poetry run python manage.py db migrate
-- docker-compose exec app poetry run python manage.py db seed
+- docker compose exec app poetry run python manage.py db migrate
+- docker compose exec app poetry run python manage.py db seed
 - access http://localhost:8100/
 
 
