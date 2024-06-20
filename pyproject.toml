@@ -26,6 +26,8 @@ isort = "^5.13.2"
 yapf = "^0.40.2"
 toml = "^0.10.2"
 pytest = "^8.2.0"
+mock-alchemy = "^0.2.6"
+sqlalchemy-model-faker = "^0.0.4"
 
 [build-system]
 requires = ["poetry-core"]

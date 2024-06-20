@@ -24,14 +24,11 @@ class AdminUser(Base, BaseUser):
                         onupdate=func.now(),
                         server_default=func.now())
 
-    @property
     def is_authenticated(self) -> bool:
         raise NotImplementedError()  # pragma: no cover
 
-    @property
     def display_name(self) -> str:
         return self.name
 
-    @property
     def identity(self) -> str:
         return str(self.id)

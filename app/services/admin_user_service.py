@@ -34,10 +34,10 @@ class AdminUserService(AdminUserServiceInterface):
 
         return None, None
 
-    def generate_access_token(self, user_id: str) -> str:
+    def generate_access_token(self, admin_user_id: str) -> str:
         encoded_jwt = self._jwt.create_access_token({
-            "sub": user_id,
-            "user_id": user_id
+            "sub": admin_user_id,
+            "user_id": admin_user_id
         })
         return encoded_jwt
 
@@ -51,19 +51,19 @@ class AdminUserService(AdminUserServiceInterface):
 
         return admin_user
 
-    def get_admin_user_by_id(self, id: str) -> Optional[AdminUser]:
-        admin_user = self._admin_user_repository.get_by_id(id)
+    def get_admin_user_by_id(self, admin_user_id: str) -> Optional[AdminUser]:
+        admin_user = self._admin_user_repository.get_by_id(admin_user_id)
         return admin_user
 
     def update_admin_user(self, admin_user_id: str,
-                          admin: dict) -> Optional[AdminUser]:
+                          data: dict) -> Optional[AdminUser]:
         admin_user = self._admin_user_repository.get_by_id(admin_user_id)
         if admin_user is None:
             raise ClientSideError("Admin user not found")
 
-        if "password" in admin:
-            admin["password"] = self._hash.generate_hash(admin["password"])
+        if "password" in data:
+            data["password"] = self._hash.generate_hash(data["password"])
 
         updated_admin_user = self._admin_user_repository.update(
-            admin_user_id, admin)
+            admin_user_id, data)
         return updated_admin_user

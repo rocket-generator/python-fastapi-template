@@ -12,7 +12,7 @@ class AdminUserServiceInterface(metaclass=ABCMeta):
         raise NotImplementedError
 
     @abstractmethod
-    def generate_access_token(self, user_id: str) -> str:
+    def generate_access_token(self, admin_user_id: str) -> str:
         raise NotImplementedError
 
     @abstractmethod
@@ -21,7 +21,7 @@ class AdminUserServiceInterface(metaclass=ABCMeta):
         raise NotImplementedError
 
     @abstractmethod
-    def get_admin_user_by_id(self, id: str) -> Optional[AdminUser]:
+    def get_admin_user_by_id(self, admin_user_id: str) -> Optional[AdminUser]:
         raise NotImplementedError
 
     @abstractmethod
