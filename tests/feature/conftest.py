@@ -2,7 +2,6 @@ import pytest
 from alembic import command
 from alembic.config import Config
 
-from app.config import Config
 from database.seeds import seed as seeder
 
 

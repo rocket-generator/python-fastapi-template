@@ -1,0 +1,16 @@
+from typing import Optional
+
+from sqlalchemy_model_faker import factory
+
+from app.models.{{ .Name.Singular.Snake }} import {{ .Name.Singular.Title }}
+
+
+def {{ .Name.Singular.Snake }}_factory(_id: Optional[str] = None,
+                       data: Optional[dict] = None) -> {{ .Name.Singular.Title }}:
+    fields = {}
+    if _id is not None:
+        fields["id"] = _id
+    if data is not None:
+        for key, value in data.items():
+            fields[key] = value
+    return factory({{ .Name.Singular.Title }}).make(fields)

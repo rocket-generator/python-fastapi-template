@@ -1,4 +1,5 @@
 import os
+from typing import Optional
 
 from dotenv import load_dotenv
 from pydantic_settings import BaseSettings
@@ -26,8 +27,13 @@ class Config(BaseSettings):
     JWT_ALGORITHM: str = os.getenv("JWT_ALGORITHM", "HS256")
     JWT_EXPIRE_MINUTES: int = int(os.getenv("JWT_EXPIRE_MINUTES", "120"))
 
-    def __init__(self, **kwargs):
-        _env = os.getenv("ENVIRONMENT", "unknown")
+    def __init__(self, environment: Optional[str] = None, **kwargs):
+
+        if environment is not None:
+            _env = environment
+        else:
+            _env = os.getenv("ENVIRONMENT", "local")
+
         super().__init__(**kwargs)
         database_uri = f"{self.DB_DRIVER}://{self.DB_USERNAME}:{self.DB_PASSWORD}@{self.DB_HOST}/{self.DB_NAME}"
         if self.DB_DRIVER == "sqlite":

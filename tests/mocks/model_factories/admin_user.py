@@ -11,6 +11,6 @@ def admin_user_factory(_id: Optional[str] = None,
     if _id is not None:
         fields["id"] = _id
     if data is not None:
-        if 'email' in data:
-            fields["email"] = data["email"]
+        for key, value in data.items():
+            fields[key] = value
     return factory(AdminUser).make(fields)
