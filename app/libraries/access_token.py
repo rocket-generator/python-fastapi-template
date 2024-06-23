@@ -1,14 +1,15 @@
 from datetime import datetime, timedelta, timezone
 from typing import Optional
 
-from jose import jwt, exceptions
-
+from jose import exceptions, jwt
 
 from app.config import config
 from app.exceptions.client_side_error import ClientSideError
+from app.interfaces.libraries.access_token_interface import \
+    AccessTokenInterface
 
 
-class JWT(object):
+class AccessToken(AccessTokenInterface):
 
     @staticmethod
     def create_access_token(data: dict,
@@ -26,7 +27,7 @@ class JWT(object):
         return encoded_jwt
 
     @staticmethod
-    def extract_from_jwt(token: str) -> Optional[dict]:
+    def extract_from_token(token: str) -> Optional[dict]:
         try:
             return jwt.decode(token,
                               config.JWT_SECRET,

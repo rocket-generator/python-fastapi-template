@@ -1,6 +1,7 @@
+import faker
+
 from app.usecases.put_admin_me_usecase import PutAdminMeUsecase
 from tests.mocks.services.mock_admin_user_service import MockAdminUserService
-import faker
 
 
 def test_handle_put_admin_me_usecase():

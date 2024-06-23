@@ -1,5 +1,5 @@
 from abc import ABCMeta, abstractmethod
-from typing import Any, Dict
+from typing import Any, Dict, List
 
 
 class BaseRepositoryInterface(metaclass=ABCMeta):
@@ -10,11 +10,14 @@ class BaseRepositoryInterface(metaclass=ABCMeta):
         raise NotImplementedError
 
     @abstractmethod
-    def list(self, offset: int = 0, limit: int = 20) -> [model]:
+    def list(self, offset: int = 0, limit: int = 20) -> List[model]:
         raise NotImplementedError
 
     @abstractmethod
-    def list_by_filter(self, offset: int = 0, limit: int = 20) -> [model]:
+    def list_by_filter(self,
+                       _filter: dict,
+                       offset: int = 0,
+                       limit: int = 20) -> List[model]:
         raise NotImplementedError
 
     @abstractmethod

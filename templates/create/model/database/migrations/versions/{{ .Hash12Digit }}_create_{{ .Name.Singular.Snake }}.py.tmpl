@@ -1,0 +1,44 @@
+"""create_{{ .Name.Singular.Snake }}
+
+Revision ID: {{ .Hash12Digit }}
+Revises:
+Create Date: 2024-06-09 09:16:51.483252
+
+"""
+from typing import Sequence, Union
+
+from alembic import op
+import sqlalchemy
+from app.models.types import UUID
+from sqlalchemy.sql import func, text
+
+
+# revision identifiers, used by Alembic.
+revision: str = '{{ .Hash12Digit }}'
+down_revision: Union[str, None] = None
+branch_labels: Union[str, Sequence[str], None] = None
+depends_on: Union[str, Sequence[str], None] = None
+
+# uuid_blob(uuid())
+# gen_random_uuid()
+
+def upgrade() -> None:
+    op.create_table(
+        '{{ .Name.Singular.Snake }}',
+        {{- range .Columns}}
+        {{- if .Primary }}
+        sqlalchemy.Column('{{ .Name.Original }}', UUID, primary_key=True, server_default=text('gen_random_uuid()')),
+        {{- else }}
+        sqlalchemy.Column('{{ .Name.Original }}', sqlalchemy.{{ .ObjectType }}, nullable={{ if .Nullable }}True{{ else }}False{{ end }}) {{ if ne .DefaultValue "" }}default="{{ .DefaultValue }}"{{ end }}),
+        {{- end }}
+        {{- end }}
+
+        sqlalchemy.Column('created_at', sqlalchemy.TIMESTAMP(timezone=True), nullable=False,
+                          server_default=func.now()),
+        sqlalchemy.Column('updated_at', sqlalchemy.TIMESTAMP(timezone=True), nullable=False,
+                          server_default=func.now(),
+                          onupdate=func.now()),
+    )
+
+def downgrade() -> None:
+    op.drop_table('{{ .Name.Singular.Snake }}')

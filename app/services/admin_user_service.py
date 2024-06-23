@@ -1,26 +1,27 @@
 from typing import Optional, Tuple
 
 from injector import Injector, inject
-from sqlalchemy.orm import scoped_session
 
 from ..config import Config
 from ..exceptions import ClientSideError
+from ..interfaces.libraries.access_token_interface import AccessTokenInterface
+from ..interfaces.libraries.hash_interface import HashInterface
+from ..interfaces.repositories.admin_user_repository_interface import \
+    AdminUserRepositoryInterface
 from ..interfaces.services.admin_user_service_interface import \
     AdminUserServiceInterface
-from ..libraries import JWT, Hash
 from ..models.admin_user import AdminUser
-from ..repositories.admin_user_repository import AdminUserRepository
 
 
 class AdminUserService(AdminUserServiceInterface):
 
     @inject
-    def __init__(self, admin_user_repository: AdminUserRepository, _hash: Hash,
-                 _jwt: JWT, _db: scoped_session, _config: Config):
+    def __init__(self, admin_user_repository: AdminUserRepositoryInterface,
+                 _hash: HashInterface, _access_token: AccessTokenInterface,
+                 _config: Config):
         self._admin_user_repository = admin_user_repository
         self._hash = _hash
-        self._jwt = _jwt
-        self._db = _db
+        self._access_token = _access_token
         self._config = _config
 
     def sign_in(self, email: str,
@@ -35,15 +36,17 @@ class AdminUserService(AdminUserServiceInterface):
         return None, None
 
     def generate_access_token(self, admin_user_id: str) -> str:
-        encoded_jwt = self._jwt.create_access_token({
-            "sub": admin_user_id,
-            "user_id": admin_user_id
+        encoded_jwt = self._access_token.create_access_token({
+            "sub":
+            admin_user_id,
+            "user_id":
+            admin_user_id
         })
         return encoded_jwt
 
     def get_admin_user_by_token(self,
                                 access_token: str) -> Optional[AdminUser]:
-        decoded_jwt = self._jwt.extract_from_jwt(access_token)
+        decoded_jwt = self._access_token.extract_from_token(access_token)
         if decoded_jwt is None:
             return None
         admin_user_id = decoded_jwt["user_id"]

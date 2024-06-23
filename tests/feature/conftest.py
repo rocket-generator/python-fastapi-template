@@ -1,9 +1,9 @@
 import pytest
-from app.config import Config
-from alembic.config import Config
 from alembic import command
-from database.seeds import seed as seeder
+from alembic.config import Config
 
+from app.config import Config
+from database.seeds import seed as seeder
 
 
 @pytest.fixture(scope='module', autouse=True)
@@ -18,4 +18,3 @@ def setup_database():
 
     # Downgrade to the base version
     command.downgrade(alembic_cfg, "base")
-

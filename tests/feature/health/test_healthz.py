@@ -1,5 +1,7 @@
 from fastapi.testclient import TestClient
+
 from app.bootstrap.create_app import create_app
+
 app = create_app()
 
 client = TestClient(app)

@@ -1,0 +1,17 @@
+from app.models.admin_user import AdminUser
+from faker import Faker
+
+
+def test_create_model_instance():
+    faker_instance = Faker()
+
+    model = {{ .Name.Singular.Title }}(
+{{- range .Columns}}
+{{- if not .Primary }}
+{{- if not .IsSystemUseColumn }}
+        {{ .Name.Original }}=faker_instance{{ .FakerType }}(),
+{{- end }}
+{{- end }}
+{{- end }}
+    )
+    assert model is not None

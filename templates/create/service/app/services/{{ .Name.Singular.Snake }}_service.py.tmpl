@@ -1,0 +1,24 @@
+from typing import Optional, Tuple
+
+from injector import Injector, inject
+from sqlalchemy.orm import scoped_session
+
+from ..config import Config
+from ..exceptions import ClientSideError
+from ..interfaces.services.{{ .Name.Singular.Snake }}_service_interface import \
+    {{ .Name.Singular.Title }}ServiceInterface
+from ..libraries import JWT, Hash
+from ..models.{{ .Singular.Snake }} import {{ .Singular.Title }}
+from ..repositories.{{ .Singular.Snake }}_repository import {{ .Singular.Title }}Repository
+
+
+class {{ .Name.Singular.Title }}Service({{ .Name.Singular.Title }}ServiceInterface):
+
+    @inject
+    def __init__(self, {{ .Singular.Snake }}_repository: {{ .Singular.Title }}Repository,
+                 _hash: Hash, _jwt: JWT, _db: scoped_session, _config: Config):
+        self._{{ .Singular.Snake }}_repository = {{ .Singular.Snake }}_repository
+        self._hash = _hash
+        self._jwt = _jwt
+        self._db = _db
+        self._config = _config

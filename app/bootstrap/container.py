@@ -5,6 +5,8 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 from ..config import Config, config
 from ..http.middlewares.auth.admin_authentication_backend import \
     AdminAuthenticationBackend
+from ..interfaces.libraries.access_token_interface import AccessTokenInterface
+from ..interfaces.libraries.hash_interface import HashInterface
 from ..interfaces.repositories.admin_user_repository_interface import \
     AdminUserRepositoryInterface
 from ..interfaces.services.admin_user_service_interface import \
@@ -13,7 +15,7 @@ from ..interfaces.usecases.get_admin_me_usecase_interface import \
     GetAdminMeUsecaseInterface
 from ..interfaces.usecases.put_admin_me_usecase_interface import \
     PutAdminMeUsecaseInterface
-from ..libraries import JWT, Hash
+from ..libraries import AccessToken, Hash
 from ..repositories.admin_user_repository import AdminUserRepository
 from ..services.admin_user_service import AdminUserService
 from ..usecases.get_admin_me_usecase import GetAdminMeUsecase
@@ -35,10 +37,10 @@ def configure(binder: Binder):
 
     # Libraries
     _hash = Hash()
-    binder.bind(Hash, to=_hash)
+    binder.bind(HashInterface, to=_hash)
 
-    _jwt = JWT()
-    binder.bind(JWT, to=_jwt)
+    _access_token = AccessToken()
+    binder.bind(AccessTokenInterface, to=_access_token)
 
     # Repositories
     admin_user_repository = AdminUserRepository(db)
@@ -47,8 +49,7 @@ def configure(binder: Binder):
     # Services
     admin_user_service = AdminUserService(admin_user_repository,
                                           _hash=_hash,
-                                          _jwt=_jwt,
-                                          _db=db,
+                                          _access_token=_access_token,
                                           _config=config)
     binder.bind(AdminUserServiceInterface, to=admin_user_service)
 
@@ -63,8 +64,5 @@ def configure(binder: Binder):
 
     # Middlewares
     admin_authentication_backend = AdminAuthenticationBackend(
-        _admin_user_service=admin_user_service,
-        _jwt=_jwt,
-        _db=db,
-        _config=config)
+        _admin_user_service=admin_user_service, _config=config)
     binder.bind(AdminAuthenticationBackend, to=admin_authentication_backend)

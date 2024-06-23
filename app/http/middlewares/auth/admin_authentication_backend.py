@@ -4,18 +4,15 @@ from starlette.authentication import (AuthCredentials, AuthenticationBackend,
                                       AuthenticationError, SimpleUser)
 
 from ....config import Config
-from ....libraries.access_token import JWT
+from ....libraries.access_token import AccessToken
 from ....services.admin_user_service import AdminUserService
 
 
 class AdminAuthenticationBackend(AuthenticationBackend):
 
     @inject
-    def __init__(self, _admin_user_service: AdminUserService, _jwt: JWT,
-                 _db: scoped_session, _config: Config):
+    def __init__(self, _admin_user_service: AdminUserService, _config: Config):
         self._admin_user_service = _admin_user_service
-        self._jwt = _jwt
-        self._db = _db
         self._config = _config
 
     async def authenticate(self, conn):

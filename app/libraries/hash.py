@@ -1,7 +1,9 @@
 import bcrypt
 
+from app.interfaces.libraries.hash_interface import HashInterface
 
-class Hash(object):
+
+class Hash(HashInterface):
 
     @staticmethod
     def generate_hash(key: str) -> str:

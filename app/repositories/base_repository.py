@@ -1,13 +1,16 @@
 from abc import ABCMeta, abstractmethod
-from typing import Any, Dict
+from typing import Any, Dict, List, Optional
 
 from injector import Injector, inject
+from sqlalchemy import and_
 from sqlalchemy.orm import scoped_session
 
+from ..interfaces.repositories.base_repository_interface import \
+    BaseRepositoryInterface
 from ..models import Base
 
 
-class BaseRepository(metaclass=ABCMeta):
+class BaseRepository(BaseRepositoryInterface, metaclass=ABCMeta):
 
     @property
     @abstractmethod
@@ -18,11 +21,24 @@ class BaseRepository(metaclass=ABCMeta):
     def __init__(self, db: scoped_session):
         self._db = db
 
-    def list(self, offset: int = 0, limit: int = 20) -> [model]:
+    def list(self, offset: int = 0, limit: int = 20) -> List[model]:
         return self._db.query(self.model).limit(limit).offset(offset).all()
 
-    def list_by_filter(self, offset: int = 0, limit: int = 20) -> [model]:
-        return self._db.query(self.model).limit(limit).offset(offset).all()
+    def list_by_filter(self,
+                       _filter: dict,
+                       offset: int = 0,
+                       limit: int = 20) -> List[model]:
+        query = self._db.query(self.model)
+
+        filter_conditions = []
+        for key, value in _filter.items():
+            if hasattr(self.model, key):
+                filter_conditions.append(getattr(self.model, key) == value)
+
+        if filter_conditions:
+            query = query.filter(and_(*filter_conditions))
+
+        return query.limit(limit).offset(offset).all()
 
     def get_by_id(self, _id: str) -> model:
         return self._db.query(self.model).filter(self.model.id == _id).first()

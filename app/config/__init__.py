@@ -1,9 +1,6 @@
 import os
-from pathlib import Path
-from typing import Union
 
 from dotenv import load_dotenv
-from pydantic import AnyHttpUrl, IPvAnyAddress
 from pydantic_settings import BaseSettings
 
 load_dotenv()
@@ -29,14 +26,12 @@ class Config(BaseSettings):
     JWT_ALGORITHM: str = os.getenv("JWT_ALGORITHM", "HS256")
     JWT_EXPIRE_MINUTES: int = int(os.getenv("JWT_EXPIRE_MINUTES", "120"))
 
-    def __init__(self, environment: str = 'local', **kwargs):
+    def __init__(self, **kwargs):
         _env = os.getenv("ENVIRONMENT", "unknown")
-        print(f'Environment name: {_env}')
         super().__init__(**kwargs)
         database_uri = f"{self.DB_DRIVER}://{self.DB_USERNAME}:{self.DB_PASSWORD}@{self.DB_HOST}/{self.DB_NAME}"
         if self.DB_DRIVER == "sqlite":
             database_uri = f"{self.DB_DRIVER}:///{self.DB_NAME}"
-        print(f'DB variables for {database_uri} environment')
 
         self.SQLALCHEMY_DATABASE_URI = database_uri
 

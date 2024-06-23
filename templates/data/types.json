@@ -1,0 +1,30 @@
+{
+  "database": {
+    "text": "string",
+    "uuid": "uuid",
+    "date": "string",
+    "boolean": "boolean",
+    "number": "float",
+    "integer": "integer",
+    "int": "integer",
+    "bigint": "bigInteger",
+    "jsonb": "jsonb",
+    "varchar": "string",
+    "bigserial": "bigIncrements",
+    "serial": "increments"
+  },
+  "code": {
+    "text": "string",
+    "uuid": "string",
+    "date": "string",
+    "boolean": "bool",
+    "number": "float",
+    "integer": "int",
+    "int": "int",
+    "bigint": "int",
+    "jsonb": "array",
+    "varchar": "string",
+    "bigserial": "int",
+    "serial": "int"
+  }
+}
