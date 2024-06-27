@@ -5,3 +5,7 @@ class {{ .SuccessResponse.Schema.Name.Default.Title }}(BaseModel):
 {{- range .SuccessResponse.Schema.Properties}}
     {{ .Name.Original }}: {{ .Type }}
 {{- end}}
+
+    @classmate
+    def from_model(cls, model: AdminUser) -> 'AdminMe':
+        return cls(id=str(model.id), name=model.name, email=model.email)

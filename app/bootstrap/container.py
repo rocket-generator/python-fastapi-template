@@ -46,7 +46,7 @@ def configure(binder: Binder):
     admin_user_repository = AdminUserRepository(db)
     binder.bind(AdminUserRepositoryInterface, to=admin_user_repository)
 
-# /* [REGISTER_REPOSITORIES]
+# /* [REGISTER_REPOSITORIES] */
 
     # Services
     admin_user_service = AdminUserService(admin_user_repository,
@@ -55,7 +55,7 @@ def configure(binder: Binder):
                                           _config=config)
     binder.bind(AdminUserServiceInterface, to=admin_user_service)
 
-# /* [REGISTER_SERVICES]
+# /* [REGISTER_SERVICES] */
 
     # UseCases
     put_admin_user_use_case = PutAdminMeUsecase(
@@ -66,7 +66,7 @@ def configure(binder: Binder):
         admin_user_service=admin_user_service)
     binder.bind(GetAdminMeUsecaseInterface, to=get_admin_user_use_case)
 
-# /* [REGISTER_USECASES]
+# /* [REGISTER_USECASES] */
 
     # Middlewares
     admin_authentication_backend = AdminAuthenticationBackend(

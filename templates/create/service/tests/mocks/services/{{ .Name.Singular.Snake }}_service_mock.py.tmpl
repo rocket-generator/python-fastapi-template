@@ -23,5 +23,28 @@ class Mock{{ .Name.Singular.Title }}Service({{ .Name.Singular.Title }}ServiceInt
         if _id is not None:
             fields["id"] = _id
         return factory({{ .Singular.Title }}).make(fields)
+
+    def count_{{ .Plural.Snake }}(self) -> int:
+        return 1
+
+    def get_{{ .Plural.Snake }}(self, offset: int = 0, limit: int = 20) -> List[{{ .Singular.Title }}]:
+        model_01 = self.generate_{{ .Singular.Snake }}()
+        model_02 = self.generate_{{ .Singular.Snake }}()
+
+        return [model_01, model_02]
+
+    def get_{{ .Singular.Snake }}_by_id(self, admin_user_id: str) -> Optional[{{ .Singular.Title }}]:
+        return self.generate_{{ .Singular.Snake }}{{ .Singular.Snake }}_id)
+
+    def create_{{ .Singular.Snake }}(self, data: dict) -> Optional[{{ .Singular.Title }}]:
+        raise self.generate_{{ .Singular.Snake }}()
+
+    def update_{{ .Singular.Snake }}(self, {{ .Singular.Snake }}_id: str,
+                          data: dict) -> Optional[{{ .Singular.Title }}]:
+        return self.generate_{{ .Singular.Snake }}{{ .Singular.Snake }}_id)
+
+    def delete_{{ .Singular.Snake }}(self, {{ .Singular.Snake }}_id: str) -> bool:
+        return True
+
 {{- end }}
 {{- end }}

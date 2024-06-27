@@ -48,7 +48,7 @@ async def {{ .Method.Snake }}_{{ .PathName.Default.Snake }}(
 {{- if eq .RequestType "crud" }}
 {{- if eq .RequestSubType "index" }}
     models, count = usecase.handle(offset, limit)
-    {{ .SuccessResponse.Schema.Name.Default.Title }}.from_model(response, count)
+    return {{ .SuccessResponse.Schema.Name.Default.Title }}.from_model(data=models, count=count)
 {{- else if eq .RequestSubType "get" }}
     model = usecase.handle(id)
     return {{ .SuccessResponse.Schema.Name.Default.Title }}.from_model(model)
