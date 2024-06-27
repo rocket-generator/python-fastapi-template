@@ -1,4 +1,4 @@
-from sqlalchemy import TIMESTAMP, BigInteger, Column, Integer, String, event
+from sqlalchemy import TIMESTAMP, Boolean, BigInteger, Column, Integer, String, event
 from sqlalchemy.sql import func, text
 from starlette.authentication import BaseUser
 

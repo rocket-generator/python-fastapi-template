@@ -1,0 +1,12 @@
+    {{ .Name.Singular.Snake }}_service = {{ .Name.Singular.Title }}Service(
+{{- if ne .RelatedModels nil }}
+{{- range .RelatedModels}}
+                                          {{ .Singular.Snake }}_repository,
+{{- end }}
+{{- end }}
+{{- if .IsAuthService }}
+                                          _hash=_hash,
+                                          _access_token=_access_token,
+{{- end }}
+                                          _config=config)
+    binder.bind({{ .Name.Singular.Title }}ServiceInterface, to={{ .Name.Singular.Snake }}_service)

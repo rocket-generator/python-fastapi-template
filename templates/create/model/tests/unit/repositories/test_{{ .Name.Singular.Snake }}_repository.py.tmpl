@@ -1,0 +1,10 @@
+from mock_alchemy.mocking import UnifiedAlchemyMagicMock
+
+from app.repositories.{{ .Name.Singular.Snake }}_repository import {{ .Name.Singular.Title }}Repository
+
+
+def test_create_instance():
+
+    repository = {{ .Name.Singular.Title }}Repository(db=UnifiedAlchemyMagicMock())
+
+    assert repository is not None

@@ -1,0 +1,32 @@
+from abc import ABCMeta, abstractmethod
+from typing import Optional, Tuple, List, Dict
+
+{{- if ne .TargetModel nil }}
+from ..models.{{ .TargetModel.Singular.Snake }} import {{ .TargetModel.Singular.Title }}
+{{- end }}
+
+
+class {{ .Method.Title }}{{ .PathName.Default.Title }}UsecaseInterface(metaclass=ABCMeta):
+
+    @abstractmethod
+{{- if ne .TargetModel nil }}
+{{- if eq .RequestType "crud" }}
+{{- if eq .RequestSubType "index" }}
+    def handle(self, offset: int = 0, limit: int = 20) -> List[{{ .TargetModel.Singular.Title }}]:
+{{- else if eq .RequestSubType "get" }}
+    def handle(self, _id: str) -> Optional[{{ .TargetModel.Singular.Title }}]:
+{{- else if eq .RequestSubType "create" }}
+    def handle(self, data: Dict) -> Optional{{ .TargetModel.Singular.Title }}]:
+{{- else if eq .RequestSubType "update" }}
+    def handle(self, _id: str, data: Dict) -> Optional[{{ .TargetModel.Singular.Title }}]:
+{{- else if eq .Method.Camel "delete" }}
+    def handle(self, _id: str): bool:
+{{- end }}
+{{- else }}
+    def handle(): bool:
+{{- end }}
+{{- else }}
+    def handle(): bool:
+{{- end }}
+
+        raise NotImplementedError

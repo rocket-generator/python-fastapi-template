@@ -1,0 +1,71 @@
+from fastapi import APIRouter, HTTPException, Request
+from starlette.authentication import requires
+
+{{- if ne .RequestSchemaName.Default.Title "" }}
+from app.http.requests.{{ .RequestSchemaName.Default.Snake }} import {{ .RequestSchemaName.Default.Title }}
+{{- end }}
+from app.http.responses.{{ .SuccessResponse.Schema.Name.Default.Snake }} import {{ .SuccessResponse.Schema.Name.Default.Title }}
+from app.http.responses.status import Status
+
+from ...interfaces.usecases.{{ .Method.Snake }}_{{ .PathName.Default.Snake }}_usecase_interface import \
+    {{ .Method.Title }}{{ .PathName.Default.Title }}UsecaseInterface
+
+router = APIRouter(
+    prefix="/",
+    tags=[""],
+    responses={
+        401: Status(success=False, message="Unauthorized").model_dump(),
+        402: Status(success=False, message="Forbidden").model_dump(),
+        404: Status(success=False, message="Not found").model_dump(),
+    },
+)
+
+
+@router.get("{{ .Path }}")
+@requires([""])
+async def {{ .Method.Snake }}_{{ .PathName.Default.Snake }}(
+    request: Request,
+{{- if eq .RequestType "crud" }}
+{{- if eq .RequestSubType "index" }}
+    offset: int = 0,
+    limit: int = 20,
+{{- else if eq .RequestSubType "get" }}
+    id: str,
+{{- else if eq .Method.Camel "update" }}
+    id: str,
+{{- else if eq .Method.Camel "delete" }}
+    id: str,
+{{- end }}
+{{- if ne .RequestSchemaName.Default.Title "" }}
+    request: Request,
+    request_data: {{ .RequestSchemaName.Default.Title }}
+{{- end }}
+) -> {{ .SuccessResponse.Schema.Name.Default.Title }}:
+    usecase = request.app.state.injector.get({{ .Method.Title }}{{ .PathName.Default.Title }}UsecaseInterface)
+
+{{- if eq .RequestType "crud" }}
+{{- if eq .RequestSubType "index" }}
+    models, count = usecase.handle(offset, limit)
+    {{ .SuccessResponse.Schema.Name.Default.Title }}.from_model(response, count)
+{{- else if eq .RequestSubType "get" }}
+    model = usecase.handle(id)
+    return {{ .SuccessResponse.Schema.Name.Default.Title }}.from_model(model)
+{{- else if eq .RequestSubType "create" }}
+    model = usecase.handle(request_data.dict())
+    return {{ .SuccessResponse.Schema.Name.Default.Title }}.from_model(model)
+{{- else if eq .RequestSubType "update" }}
+    model = usecase.handle(id, request_data.dict())
+    return {{ .SuccessResponse.Schema.Name.Default.Title }}.from_model(model)
+{{- else if eq .Method.Camel "delete" }}
+    success = usecase.handle(id)
+    return {{ .SuccessResponse.Schema.Name.Default.Title }}.from_model(success)
+{{- end }}
+{{- else }}
+    response = usecase.handle()
+    return {{ .SuccessResponse.Schema.Name.Default.Title }}.from_model(success)
+{{- end }}
+
+
+
+
+

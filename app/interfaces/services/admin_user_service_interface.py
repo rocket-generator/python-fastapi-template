@@ -1,5 +1,5 @@
 from abc import ABCMeta, abstractmethod
-from typing import Optional, Tuple
+from typing import Optional, Tuple, List
 
 from ...models.admin_user import AdminUser
 
@@ -21,10 +21,22 @@ class AdminUserServiceInterface(metaclass=ABCMeta):
         raise NotImplementedError
 
     @abstractmethod
+    def count_admin_users(self) -> int:
+        raise NotImplementedError
+
+    @abstractmethod
+    def get_admin_users(self, offset: int = 0, limit: int = 20) -> List[AdminUser]:
+        raise NotImplementedError
+
+    @abstractmethod
     def get_admin_user_by_id(self, admin_user_id: str) -> Optional[AdminUser]:
         raise NotImplementedError
 
     @abstractmethod
     def update_admin_user(self, admin_user_id: str,
                           admin: dict) -> Optional[AdminUser]:
+        raise NotImplementedError
+
+    @abstractmethod
+    def delete_admin_user(self, admin_user_id: str) -> bool:
         raise NotImplementedError

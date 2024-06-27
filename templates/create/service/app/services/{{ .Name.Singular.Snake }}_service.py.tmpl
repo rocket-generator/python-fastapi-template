@@ -1,4 +1,4 @@
-from typing import Optional, Tuple
+from typing import Optional, Tuple, List
 
 from injector import Injector, inject
 from sqlalchemy.orm import scoped_session
@@ -8,17 +8,70 @@ from ..exceptions import ClientSideError
 from ..interfaces.services.{{ .Name.Singular.Snake }}_service_interface import \
     {{ .Name.Singular.Title }}ServiceInterface
 from ..libraries import JWT, Hash
-from ..models.{{ .Singular.Snake }} import {{ .Singular.Title }}
-from ..repositories.{{ .Singular.Snake }}_repository import {{ .Singular.Title }}Repository
 
+{{- if ne .RelatedModels nil }}
+{{- range .RelatedModels}}
+from ..models.{{ .Singular.Snake }} import {{ .Singular.Title }}
+{{- end }}
+
+{{- range .RelatedModels}}
+from ..repositories.{{ .Singular.Snake }}_repository import {{ .Singular.Title }}Repository
+{{- end }}
+{{- end }}
 
 class {{ .Name.Singular.Title }}Service({{ .Name.Singular.Title }}ServiceInterface):
 
     @inject
-    def __init__(self, {{ .Singular.Snake }}_repository: {{ .Singular.Title }}Repository,
-                 _hash: Hash, _jwt: JWT, _db: scoped_session, _config: Config):
+    def __init__(self,
+{{- if ne .RelatedModels nil }}
+{{- range .RelatedModels}}
+                {{ .Singular.Snake }}_repository: {{ .Singular.Title }}Repository,
+{{- end }}
+{{- end }}
+{{- if .IsAuthService }}
+                 _hash: Hash, _jwt: JWT,
+{{- end }}
+                 _config: Config):
+{{- if ne .RelatedModels nil }}
+
+{{- range .RelatedModels}}
         self._{{ .Singular.Snake }}_repository = {{ .Singular.Snake }}_repository
+{{- end }}
+{{- end }}
+
+{{- if .IsAuthService }}
         self._hash = _hash
         self._jwt = _jwt
-        self._db = _db
+{{- end }}
         self._config = _config
+
+{{- if ne .RelatedModels nil }}
+{{- range .RelatedModels}}
+    def count_{{ .Plural.Snake }}(self) -> int:
+        return self._{{ .Singular.Snake }}_repository.count()
+
+    def get_{{ .Plural.Snake }}(self, offset: int = 0, limit: int = 20) -> List[{{ .Singular.Title }}]:
+        return self._{{ .Singular.Snake }}_repository.list(offset=offset, limit=limit)
+
+    def get_{{ .Singular.Snake }}_by_id(self, admin_user_id: str) -> Optional[{{ .Singular.Title }}]:
+        return self._{{ .Singular.Snake }}_repository.get_by_id({{ .Singular.Snake }}_id)
+
+    def create_{{ .Singular.Snake }}(self, data: dict) -> Optional[{{ .Singular.Title }}]:
+        raise NotImplementedError
+
+    def update_{{ .Singular.Snake }}(self, {{ .Singular.Snake }}_id: str,
+                          data: dict) -> Optional[{{ .Singular.Title }}]:
+        model = self._{{ .Singular.Snake }}_repository.get_by_id({{ .Singular.Snake }}_id)
+        if model is None:
+            raise ClientSideError("Model not found")
+
+        updated_model = self._{{ .Singular.Snake }}_repository.update({{ .Singular.Snake }}_id, data)
+        return updated_model
+
+    def delete_{{ .Singular.Snake }}(self, {{ .Singular.Snake }}_id: str) -> bool:
+        self._{{ .Singular.Snake }}_repository.delete({{ .Singular.Snake }}_id)
+        return True
+{{- end }}
+{{- else }}
+    pass
+{{- end }}

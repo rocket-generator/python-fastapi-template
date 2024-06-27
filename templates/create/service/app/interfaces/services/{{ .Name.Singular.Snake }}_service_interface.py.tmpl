@@ -1,0 +1,40 @@
+from abc import ABCMeta, abstractmethod
+from typing import Optional, Tuple, List
+
+{{- if ne .RelatedModels nil }}
+{{- range .RelatedModels}}
+from ...models.{{ .Singular.Snake }} import {{ .Singular.Title }}
+{{- end }}
+{{- end }}
+
+class {{ .Name.Singular.Title }}ServiceInterface(metaclass=ABCMeta):
+{{- if ne .RelatedModels nil }}
+{{- range .RelatedModels}}
+    @abstractmethod
+    def count_{{ .Plural.Snake }}(self) -> int:
+        raise NotImplementedError
+
+    @abstractmethod
+    def get_{{ .Plural.Snake }}(self, offset: int = 0, limit: int = 20) -> List[{{ .Singular.Title }}]:
+        raise NotImplementedError
+
+    @abstractmethod
+    def get_{{ .Singular.Snake }}_by_id(self, admin_user_id: str) -> Optional[{{ .Singular.Title }}]:
+        raise NotImplementedError
+
+    @abstractmethod
+    def create_{{ .Singular.Snake }}(self, data: dict) -> Optional[{{ .Singular.Title }}]:
+        raise NotImplementedError
+
+    @abstractmethod
+    def update_{{ .Singular.Snake }}(self, {{ .Singular.Snake }}_id: str,
+                          data: dict) -> Optional[{{ .Singular.Title }}]:
+        raise NotImplementedError
+
+    @abstractmethod
+    def delete_{{ .Singular.Snake }}(self, {{ .Singular.Snake }}_id: str) -> bool:
+        raise NotImplementedError
+{{- end }}
+{{- else }}
+    pass
+{{- end }}

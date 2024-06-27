@@ -1,0 +1,28 @@
+from app.usecases.{{ .Method.Snake }}_{{ .PathName.Default.Snake }}_usecase import {{ .Method.Title }}{{ .PathName.Default.Title }}Usecase
+{{- if ne .TargetModel nil }}
+from tests.mocks.services.mock_{{ .TargetModel.Singular.Snake }}_service import Mock{{ .TargetModel.Singular.Title }}Service
+{{- end }}
+
+def test_{{ .Method.Snake }}_{{ .PathName.Default.Snake }}_usecase():
+    usecase = {{ .Method.Title }}{{ .PathName.Default.Title }}Usecase({{ if ne .TargetModel nil }}Mock{{ .TargetModel.Singular.Title }}Service(){{ end }})
+{{- if eq .RequestType "crud" }}
+{{- if eq .RequestSubType "index" }}
+    models = usecase.handle(offset=0, limit=20)
+
+{{- else if eq .RequestSubType "get" }}
+    model = usecase.handle("acc57e72-860a-5efa-a5fe-f7bbf745c71f")
+    assert model is not None
+{{- else if eq .RequestSubType "create" }}
+    model = usecase.handle({})
+    assert model is not None
+{{- else if eq .RequestSubType "update" }}
+    model = usecase.handle("acc57e72-860a-5efa-a5fe-f7bbf745c71f", {})
+    assert model is not None
+{{- else if eq .Method.Camel "delete" }}
+    success = usecase.handle("acc57e72-860a-5efa-a5fe-f7bbf745c71f")
+    assert success is True
+{{- end }}
+{{- else }}
+    success = usecase.handle()
+    assert success is True
+{{- end }}

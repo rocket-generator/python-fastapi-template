@@ -1,3 +1,5 @@
+volumes:
+  virtualenv:
 services:
   app:
     container_name: app
@@ -6,13 +8,15 @@ services:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - ./app:/app/app
+      - .:/app
+      - /app/.venv
     command: poetry run python manage.py serve
     ports:
       - 8100:8100
     depends_on:
       - postgres
     environment:
+      - POETRY_VIRTUALENVS_IN_PROJECT=true
       - ENVIRONMENT=local
       - DB_DRIVER=postgresql
       - DB_USERNAME=postgres
@@ -33,4 +37,4 @@ services:
     volumes:
       - ./postgres_data:/var/lib/postgresql/data
     ports:
-      - 5432:5432
+      - 15432:5432

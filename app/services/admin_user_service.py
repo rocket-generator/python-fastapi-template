@@ -1,4 +1,4 @@
-from typing import Optional, Tuple
+from typing import Optional, Tuple, List
 
 from injector import Injector, inject
 
@@ -44,9 +44,15 @@ class AdminUserService(AdminUserServiceInterface):
         })
         return encoded_jwt
 
+    def count_admin_users(self) -> int:
+        return self._admin_user_repository.count()
+
+    def get_admin_users(self, offset: int = 0, limit: int = 20) -> List[AdminUser]:
+        return self._admin_user_repository.list(offset=offset, limit=limit)
+
     def get_admin_user_by_token(self,
                                 access_token: str) -> Optional[AdminUser]:
-        decoded_jwt = self._access_token.extract_from_token(access_token)
+        decoded_jwt = self._access_token.extract_from_token(token=access_token)
         if decoded_jwt is None:
             return None
         admin_user_id = decoded_jwt["user_id"]
@@ -55,8 +61,7 @@ class AdminUserService(AdminUserServiceInterface):
         return admin_user
 
     def get_admin_user_by_id(self, admin_user_id: str) -> Optional[AdminUser]:
-        admin_user = self._admin_user_repository.get_by_id(admin_user_id)
-        return admin_user
+        return self._admin_user_repository.get_by_id(admin_user_id)
 
     def update_admin_user(self, admin_user_id: str,
                           data: dict) -> Optional[AdminUser]:

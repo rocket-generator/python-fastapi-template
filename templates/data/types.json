@@ -1,30 +1,30 @@
 {
   "database": {
-    "text": "string",
-    "uuid": "uuid",
-    "date": "string",
-    "boolean": "boolean",
-    "number": "float",
-    "integer": "integer",
-    "int": "integer",
-    "bigint": "bigInteger",
-    "jsonb": "jsonb",
-    "varchar": "string",
+    "text": "Text",
+    "uuid": "UUID",
+    "date": "Date",
+    "boolean": "Boolean",
+    "number": "Float",
+    "integer": "Integer",
+    "int": "Integer",
+    "bigint": "BigInteger",
+    "jsonb": "JSON",
+    "varchar": "VARCHAR",
     "bigserial": "bigIncrements",
-    "serial": "increments"
+    "serial": "Increments"
   },
   "code": {
-    "text": "string",
-    "uuid": "string",
-    "date": "string",
-    "boolean": "bool",
-    "number": "float",
-    "integer": "int",
-    "int": "int",
-    "bigint": "int",
+    "text": "String",
+    "uuid": "UUID",
+    "date": "String",
+    "boolean": "Boolean",
+    "number": "Float",
+    "integer": "Integer",
+    "int": "Integer",
+    "bigint": "BigInteger",
     "jsonb": "array",
-    "varchar": "string",
-    "bigserial": "int",
-    "serial": "int"
+    "varchar": "String",
+    "bigserial": "BigInteger",
+    "serial": "Integer"
   }
 }

@@ -1,0 +1,44 @@
+from typing import Optional, Tuple
+
+
+from ..interfaces.usecases.{{ .Method.Snake }}_{{ .PathName.Default.Snake }}_usecase_interface import \
+    {{ .Method.Title }}{{ .PathName.Default.Title }}UsecaseInterface
+{{- if ne .TargetModel nil }}
+from ..models.{{ .TargetModel.Singular.Snake }} import {{ .TargetModel.Singular.Title }}
+from ..interfaces.services.{{ .TargetModel.Singular.Snake }}_service_interface import \
+    {{ .TargetModel.Singular.Title }}ServiceInterface
+{{- end }}
+
+class {{ .Method.Title }}{{ .PathName.Default.Title }}Usecase({{ .Method.Title }}{{ .PathName.Default.Title }}UsecaseInterface):
+
+{{- if ne .TargetModel nil }}
+    def __init__(self, {{ .TargetModel.Singular.Snake }}_service: {{ .TargetModel.Singular.Title }}ServiceInterface):
+        self.{{ .TargetModel.Singular.Snake }}_service = {{ .TargetModel.Singular.Snake }}_service
+{{- else }}
+    def __init__(self):
+        pass
+{{- end }}
+
+{{- if eq .RequestType "crud" }}
+{{- if eq .RequestSubType "index" }}
+    def handle(self, offset: int = 0, limit: int = 20) -> Tuple[List[{{ .SuccessResponse.Schema.Name.Singular.Title }}], int]:
+        count = self.{{ .TargetModel.Singular.Snake }}_service.count_{{ .TargetModel.Plural.Snake }}()
+        models = self.{{ .TargetModel.Singular.Snake }}_service.get_{{ .TargetModel.Plural.Snake }}(offset, limit)
+        return (models, count)
+{{- else if eq .RequestSubType "get" }}
+    def handle(self, _id: str) -> Optional[{{ .SuccessResponse.Schema.Name.Singular.Title }}]:
+        return self.{{ .TargetModel.Singular.Snake }}_service.get_{{ .TargetModel.Singular.Snake }}_by_id(_id)
+{{- else if eq .RequestSubType "create" }}
+    def handle(self, data: Dict) -> Optional[{{ .SuccessResponse.Schema.Name.Singular.Title }}]:
+        return self.{{ .TargetModel.Singular.Snake }}_service.create_{{ .TargetModel.Singular.Snake }}(data)
+{{- else if eq .RequestSubType "update" }}
+    def handle(self, _id: str, data: Dict) -> Optional[{{ .SuccessResponse.Schema.Name.Singular.Title }}]:
+        return self.{{ .TargetModel.Singular.Snake }}_service.update_{{ .TargetModel.Singular.Snake }}(_id, data)
+{{- else if eq .Method.Camel "delete" }}
+    def handle(self, _id: str): bool:
+        return self.{{ .TargetModel.Singular.Snake }}_service.delete_{{ .TargetModel.Singular.Snake }}(_id)
+{{- end }}
+{{- else }}
+    def handle(): bool:
+        return True
+{{- end }}

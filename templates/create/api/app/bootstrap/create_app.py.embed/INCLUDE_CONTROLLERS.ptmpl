@@ -1,0 +1,1 @@
+    app.include_router({{ .PathName.Default.Snake }}_{{ .Method.Snake }}_controller)

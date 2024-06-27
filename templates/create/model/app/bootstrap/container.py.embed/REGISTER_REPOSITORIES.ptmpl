@@ -1,0 +1,2 @@
+    {{ .Name.Singular.Snake }}_repository = {{ .Name.Singular.Title }}Repository(db)
+    binder.bind({{ .Name.Singular.Title }}RepositoryInterface, to={{ .Name.Singular.Snake }}_repository)

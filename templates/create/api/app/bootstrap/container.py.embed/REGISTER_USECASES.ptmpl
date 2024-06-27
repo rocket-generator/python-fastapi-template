@@ -1,0 +1,6 @@
+    {{ .Method.Snake }}_{{ .PathName.Default.Snake }}_usecase = {{ .Method.Title }}{{ .PathName.Default.Title }}Usecase(
+{{- if ne .TargetModel nil }}
+        {{ .TargetModel.Singular.Snake }}_service={{ .TargetModel.Singular.Snake }}_service
+{{- end }}
+    )
+    binder.bind({{ .Method.Title }}{{ .PathName.Default.Title }}UsecaseInterface, to={{ .Method.Snake }}_{{ .PathName.Default.Snake }}_usecase)

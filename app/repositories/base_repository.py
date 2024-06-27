@@ -21,6 +21,9 @@ class BaseRepository(BaseRepositoryInterface, metaclass=ABCMeta):
     def __init__(self, db: scoped_session):
         self._db = db
 
+    def count(self) -> int:
+        return self._db.query(self.model).count()
+
     def list(self, offset: int = 0, limit: int = 20) -> List[model]:
         return self._db.query(self.model).limit(limit).offset(offset).all()
 

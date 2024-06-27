@@ -1,15 +1,27 @@
 from typing import Optional, Tuple
 
-from app.interfaces.services.admin_user_service_interface import {{ .Singular.Title }}ServiceInterface
-from app.models.admin_user import {{ .Singular.Title }}
+{{- if ne .RelatedModels nil }}
+{{- range .RelatedModels}}
+from app.interfaces.services.{{ .Singular.Snake }}_service_interface import {{ .Singular.Title }}ServiceInterface
+{{- end }}
+
+{{- range .RelatedModels}}
+from app.models.{{ .Singular.Snake }} import {{ .Singular.Title }}
+{{- end }}
+{{- end }}
+
 from sqlalchemy_model_faker import factory
 
 
 class Mock{{ .Name.Singular.Title }}Service({{ .Name.Singular.Title }}ServiceInterface):
 
+{{- if ne .RelatedModels nil }}
+{{- range .RelatedModels}}
     @staticmethod
     def generate_{{ .Singular.Snake }}(_id: Optional[str] = None) -> {{ .Singular.Title }}:
         fields = {}
         if _id is not None:
             fields["id"] = _id
         return factory({{ .Singular.Title }}).make(fields)
+{{- end }}
+{{- end }}

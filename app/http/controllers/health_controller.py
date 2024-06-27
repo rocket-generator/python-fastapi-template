@@ -1,5 +1,5 @@
-from fastapi import APIRouter, HTTPException, Request
-
+from fastapi import APIRouter, HTTPException, Request, Query
+from typing import Optional
 from ...services.admin_user_service import AdminUserService
 from ..responses.status import Status
 
@@ -19,5 +19,4 @@ async def index() -> Status:
 @router.get("/healthz")
 async def healthz(request: Request) -> Status:
     admin_user_service = request.app.state.injector.get(AdminUserService)
-
     return Status(success=True, message="ok")

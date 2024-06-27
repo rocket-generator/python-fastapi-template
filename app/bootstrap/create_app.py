@@ -13,6 +13,7 @@ from app.http.controllers.admin_put_me_controller import \
 from app.http.controllers.health_controller import router as health_controller
 from app.http.middlewares.auth.admin_authentication_backend import \
     AdminAuthenticationBackend
+# /* [IMPORT_CONTROLLERS] */
 
 from .container import build_container
 
@@ -50,4 +51,5 @@ def _setup_router(app: FastAPI, injector: Injector) -> FastAPI:
     app.include_router(admin_post_auth_signin_controller)
     app.include_router(admin_get_me_controller)
     app.include_router(admin_put_me_controller)
+# /* [INCLUDE_CONTROLLERS] */
     return app

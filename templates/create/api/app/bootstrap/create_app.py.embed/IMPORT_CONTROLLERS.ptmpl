@@ -1,0 +1,2 @@
+from app.http.controllers.{{ .PathName.Default.Snake }}_{{ .Method.Snake }}_controller import \
+    router as {{ .PathName.Default.Snake }}_{{ .Method.Snake }}_controller
