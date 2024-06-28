@@ -7,8 +7,7 @@ from tests.mocks.model_factories.{{ .Name.Singular.Snake }} import {{ .Name.Sing
 from tests.mocks.repositories.mock_base_repository import MockBaseRepository
 
 
-class Mock{{ .Name.Singular.Title }}Repository({{ .Name.Singular.Title }}RepositoryInterface,
-                              MockBaseRepository):
+class Mock{{ .Name.Singular.Title }}Repository({{ .Name.Singular.Title }}RepositoryInterface, MockBaseRepository):
 
     @property
     def model(self):

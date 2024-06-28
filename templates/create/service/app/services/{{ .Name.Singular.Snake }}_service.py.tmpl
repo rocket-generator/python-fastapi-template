@@ -24,14 +24,13 @@ class {{ .Name.Singular.Title }}Service({{ .Name.Singular.Title }}ServiceInterfa
 
     @inject
     def __init__(self,
-
 {{- if ne .RelatedModels nil }}
 {{- range .RelatedModels}}
                 {{ .Singular.Snake }}_repository: {{ .Singular.Title }}Repository,
 {{- end }}
 {{- end }}
 {{- if .IsAuthService }}
-                 _hash: Hash, _jwt: JWT,
+                 _hash: Hash, _access_token: AccessToken,
 {{- end }}
                  _config: Config):
 {{- if ne .RelatedModels nil }}
@@ -43,9 +42,41 @@ class {{ .Name.Singular.Title }}Service({{ .Name.Singular.Title }}ServiceInterfa
 
 {{- if .IsAuthService }}
         self._hash = _hash
-        self._jwt = _jwt
+        self._access_token = _access_token
 {{- end }}
         self._config = _config
+
+{{- if .IsAuthService }}
+    def sign_in(self, email: str,
+                password: str) -> Tuple[Optional[{{ .Name.Singular.Title }}], Optional[str]]:
+        {{ .Name.Singular.Snake }} = self._{{ .Name.Singular.Snake }}_repository.get_by_email(email)
+        if {{ .Name.Singular.Snake }} is None:
+            return None, None
+
+        if self._hash.verify_hash(password, {{ .Name.Singular.Snake }}.password):
+            return {{ .Name.Singular.Snake }}, self.generate_access_token(str({{ .Name.Singular.Snake }}.id))
+
+        return None, None
+
+    def generate_access_token(self, {{ .Name.Singular.Snake }}_id: str) -> str:
+        encoded_jwt = self._access_token.create_access_token({
+            "sub":
+            {{ .Name.Singular.Snake }}_id,
+            "user_id":
+            {{ .Name.Singular.Snake }}_id
+        })
+        return encoded_jwt
+
+    def get_{{ .Name.Singular.Snake }}_by_token(self,
+                                access_token: str) -> Optional[{{ .Name.Singular.Title }}]:
+        decoded_jwt = self._access_token.extract_from_token(token=access_token)
+        if decoded_jwt is None:
+            return None
+        {{ .Name.Singular.Snake }}_id = decoded_jwt["user_id"]
+        {{ .Name.Singular.Snake }} = self._{{ .Name.Singular.Snake }}_repository.get_by_id({{ .Name.Singular.Snake }}_id)
+
+        return {{ .Name.Singular.Snake }}
+{{- end }}
 
 {{- if ne .RelatedModels nil }}
 {{- range .RelatedModels}}

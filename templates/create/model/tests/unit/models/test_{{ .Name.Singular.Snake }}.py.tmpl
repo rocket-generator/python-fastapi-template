@@ -10,7 +10,7 @@ def test_create_model_instance():
 {{- range .Columns}}
 {{- if not .Primary }}
 {{- if not .IsSystemUseColumn }}
-        {{ .Name.Original }}=faker_instance{{ .FakerType }}(),
+        {{ .Name.Original }}=faker_instance.{{ .FakerType }}(),
 {{- end }}
 {{- end }}
 {{- end }}

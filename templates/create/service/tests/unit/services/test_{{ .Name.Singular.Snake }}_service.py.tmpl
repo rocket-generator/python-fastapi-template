@@ -1,0 +1,31 @@
+from app.services.{{ .Name.Singular.Snake }}_service import {{ .Name.Singular.Title }}Service
+from tests.mocks.libraries.mock_access_token import MockAccessToken
+from tests.mocks.libraries.mock_hash import MockHash
+from tests.mocks.repositories.mock_admin_user_repository import \
+    MockAdminUserRepository
+from app.config import config
+
+{{- if ne .RelatedModels nil }}
+{{- range .RelatedModels}}
+from app.models.{{ .Singular.Snake }} import {{ .Singular.Title }}
+{{- end }}
+
+{{- range .RelatedModels}}
+from tests.mocks.repositories.mock_{{ .Singular.Snake }}_repository import Mock{{ .Singular.Title }}Repository
+{{- end }}
+{{- end }}
+
+def test_create_instance():
+
+    service = {{ .Name.Singular.Title }}Service(
+{{- if ne .RelatedModels nil }}
+{{- range .RelatedModels}}
+                                {{ .Singular.Snake }}_repository=Mock{{ .Singular.Title }}Repository(),
+{{- end }}
+{{- end }}
+{{- if .IsAuthService }}
+                               _hash=MockHash(),
+                               _access_token=MockAccessToken(),
+{{- end }}
+                               _config=config)
+    assert service is not None

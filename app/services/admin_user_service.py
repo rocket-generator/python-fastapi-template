@@ -44,12 +44,6 @@ class AdminUserService(AdminUserServiceInterface):
         })
         return encoded_jwt
 
-    def count_admin_users(self) -> int:
-        return self._admin_user_repository.count()
-
-    def get_admin_users(self, offset: int = 0, limit: int = 20) -> List[AdminUser]:
-        return self._admin_user_repository.list(offset=offset, limit=limit)
-
     def get_admin_user_by_token(self,
                                 access_token: str) -> Optional[AdminUser]:
         decoded_jwt = self._access_token.extract_from_token(token=access_token)
@@ -59,6 +53,12 @@ class AdminUserService(AdminUserServiceInterface):
         admin_user = self._admin_user_repository.get_by_id(admin_user_id)
 
         return admin_user
+
+    def count_admin_users(self) -> int:
+        return self._admin_user_repository.count()
+
+    def get_admin_users(self, offset: int = 0, limit: int = 20) -> List[AdminUser]:
+        return self._admin_user_repository.list(offset=offset, limit=limit)
 
     def get_admin_user_by_id(self, admin_user_id: str) -> Optional[AdminUser]:
         return self._admin_user_repository.get_by_id(admin_user_id)

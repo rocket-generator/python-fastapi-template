@@ -3,6 +3,7 @@ from app.usecases.{{ .Method.Snake }}_{{ .PathName.Default.Snake }}_usecase impo
 from tests.mocks.services.mock_{{ .TargetModel.Singular.Snake }}_service import Mock{{ .TargetModel.Singular.Title }}Service
 {{- end }}
 
+
 def test_{{ .Method.Snake }}_{{ .PathName.Default.Snake }}_usecase():
     usecase = {{ .Method.Title }}{{ .PathName.Default.Title }}Usecase({{ if ne .TargetModel nil }}Mock{{ .TargetModel.Singular.Title }}Service(){{ end }})
 {{- if eq .RequestType "crud" }}

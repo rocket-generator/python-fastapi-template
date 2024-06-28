@@ -17,6 +17,9 @@ class MockBaseRepository(BaseRepositoryInterface):
                        data: Optional[dict] = None) -> model:
         raise NotImplementedError
 
+    def count(self) -> int:
+        return 1
+
     def list(self, offset: int = 0, limit: int = 20) -> List[model]:
         model = self.generate_model()
         return [model]

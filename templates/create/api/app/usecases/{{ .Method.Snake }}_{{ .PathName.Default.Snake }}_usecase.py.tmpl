@@ -19,6 +19,7 @@ class {{ .Method.Title }}{{ .PathName.Default.Title }}Usecase({{ .Method.Title }
         pass
 {{- end }}
 
+{{- if ne .TargetModel nil }}
 {{- if eq .RequestType "crud" }}
 {{- if eq .RequestSubType "index" }}
     def handle(self, offset: int = 0, limit: int = 20) -> Tuple[List[{{ .SuccessResponse.Schema.Name.Singular.Title }}], int]:
@@ -39,6 +40,10 @@ class {{ .Method.Title }}{{ .PathName.Default.Title }}Usecase({{ .Method.Title }
         return self.{{ .TargetModel.Singular.Snake }}_service.delete_{{ .TargetModel.Singular.Snake }}(_id)
 {{- end }}
 {{- else }}
-    def handle(): bool:
+    def handle(self) -> bool:
+        return True
+{{- end }}
+{{- else }}
+    def handle(self) -> bool:
         return True
 {{- end }}

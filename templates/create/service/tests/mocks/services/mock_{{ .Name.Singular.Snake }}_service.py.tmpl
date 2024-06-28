@@ -17,6 +17,7 @@ class Mock{{ .Name.Singular.Title }}Service({{ .Name.Singular.Title }}ServiceInt
 
 {{- if ne .RelatedModels nil }}
 {{- range .RelatedModels}}
+
     @staticmethod
     def generate_{{ .Singular.Snake }}(_id: Optional[str] = None) -> {{ .Singular.Title }}:
         fields = {}
@@ -33,15 +34,15 @@ class Mock{{ .Name.Singular.Title }}Service({{ .Name.Singular.Title }}ServiceInt
 
         return [model_01, model_02]
 
-    def get_{{ .Singular.Snake }}_by_id(self, admin_user_id: str) -> Optional[{{ .Singular.Title }}]:
-        return self.generate_{{ .Singular.Snake }}{{ .Singular.Snake }}_id)
+    def get_{{ .Singular.Snake }}_by_id(self, {{ .Singular.Snake }}_id: str) -> Optional[{{ .Singular.Title }}]:
+        return self.generate_{{ .Singular.Snake }}({{ .Singular.Snake }}_id)
 
     def create_{{ .Singular.Snake }}(self, data: dict) -> Optional[{{ .Singular.Title }}]:
         raise self.generate_{{ .Singular.Snake }}()
 
     def update_{{ .Singular.Snake }}(self, {{ .Singular.Snake }}_id: str,
                           data: dict) -> Optional[{{ .Singular.Title }}]:
-        return self.generate_{{ .Singular.Snake }}{{ .Singular.Snake }}_id)
+        return self.generate_{{ .Singular.Snake }}({{ .Singular.Snake }}_id)
 
     def delete_{{ .Singular.Snake }}(self, {{ .Singular.Snake }}_id: str) -> bool:
         return True

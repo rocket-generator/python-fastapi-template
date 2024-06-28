@@ -7,6 +7,7 @@ from ...models.{{ .Singular.Snake }} import {{ .Singular.Title }}
 {{- end }}
 {{- end }}
 
+
 class {{ .Name.Singular.Title }}ServiceInterface(metaclass=ABCMeta):
 {{- if ne .RelatedModels nil }}
 {{- range .RelatedModels}}
@@ -34,6 +35,9 @@ class {{ .Name.Singular.Title }}ServiceInterface(metaclass=ABCMeta):
     @abstractmethod
     def delete_{{ .Singular.Snake }}(self, {{ .Singular.Snake }}_id: str) -> bool:
         raise NotImplementedError
+{{- end }}
+{{ if eq (len .RelatedModels) 0 }}
+    pass
 {{- end }}
 {{- else }}
     pass
