@@ -19,10 +19,7 @@ router = APIRouter(
 
 
 @router.post("/signin")
-async def signin(
-        request: Request,
-        credential: AdminSignIn
-) -> AccessToken:
+async def signin(request: Request, credential: AdminSignIn) -> AccessToken:
     admin_user_service = request.app.state.injector.get(AdminUserService)
 
     user, token = admin_user_service.sign_in(credential.email,

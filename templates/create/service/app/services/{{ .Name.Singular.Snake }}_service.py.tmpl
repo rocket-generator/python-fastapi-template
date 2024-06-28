@@ -15,7 +15,7 @@ from ..models.{{ .Singular.Snake }} import {{ .Singular.Title }}
 {{- end }}
 
 {{- range .RelatedModels}}
-from ..repositories.{{ .Singular.Snake }}_repository import {{ .Singular.Title }}Repository
+from ..interfaces.repositories.{{ .Singular.Snake }}_repository_interface import {{ .Singular.Title }}RepositoryInterface
 {{- end }}
 {{- end }}
 
@@ -26,7 +26,7 @@ class {{ .Name.Singular.Title }}Service({{ .Name.Singular.Title }}ServiceInterfa
     def __init__(self,
 {{- if ne .RelatedModels nil }}
 {{- range .RelatedModels}}
-                {{ .Singular.Snake }}_repository: {{ .Singular.Title }}Repository,
+                {{ .Singular.Snake }}_repository: {{ .Singular.Title }}RepositoryInterface,
 {{- end }}
 {{- end }}
 {{- if .IsAuthService }}
@@ -90,7 +90,7 @@ class {{ .Name.Singular.Title }}Service({{ .Name.Singular.Title }}ServiceInterfa
         return self._{{ .Singular.Snake }}_repository.get_by_id({{ .Singular.Snake }}_id)
 
     def create_{{ .Singular.Snake }}(self, data: dict) -> Optional[{{ .Singular.Title }}]:
-        raise NotImplementedError
+        return self._{{ .Singular.Snake }}_repository.create(data)
 
     def update_{{ .Singular.Snake }}(self, {{ .Singular.Snake }}_id: str,
                           data: dict) -> Optional[{{ .Singular.Title }}]:

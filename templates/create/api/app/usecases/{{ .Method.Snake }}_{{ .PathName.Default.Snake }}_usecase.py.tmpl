@@ -1,4 +1,4 @@
-from typing import Optional, Tuple
+from typing import Optional, Tuple, List, Dict
 
 
 from ..interfaces.usecases.{{ .Method.Snake }}_{{ .PathName.Default.Snake }}_usecase_interface import \
@@ -36,7 +36,7 @@ class {{ .Method.Title }}{{ .PathName.Default.Title }}Usecase({{ .Method.Title }
     def handle(self, _id: str, data: Dict) -> Optional[{{ .SuccessResponse.Schema.Name.Singular.Title }}]:
         return self.{{ .TargetModel.Singular.Snake }}_service.update_{{ .TargetModel.Singular.Snake }}(_id, data)
 {{- else if eq .Method.Camel "delete" }}
-    def handle(self, _id: str): bool:
+    def handle(self, _id: str) -> bool:
         return self.{{ .TargetModel.Singular.Snake }}_service.delete_{{ .TargetModel.Singular.Snake }}(_id)
 {{- end }}
 {{- else }}

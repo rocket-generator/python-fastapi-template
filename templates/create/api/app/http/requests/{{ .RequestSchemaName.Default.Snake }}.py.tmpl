@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic import BaseModel
 
 
@@ -5,9 +7,9 @@ class {{ .RequestSchemaName.Default.Title }}(BaseModel):
 {{- if ne .RequestSchema nil }}
 {{- range .RequestSchema.Properties}}
 {{- if eq .Required false }}
-        {{ .Name.Original }}: Optional[{{ .CodeType }}],
+    {{ .Name.Original }}: Optional[{{ .CodeType }}],
 {{- else }}
-        {{ .Name.Original }}: {{ .CodeType }},
+    {{ .Name.Original }}: {{ .CodeType }},
 {{- end }}
 {{- end }}
 {{- end }}

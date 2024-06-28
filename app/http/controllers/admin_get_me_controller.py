@@ -21,9 +21,7 @@ router = APIRouter(
 
 @router.get("/me")
 @requires(["admin_authenticated"])
-async def admin_get_me(
-        request: Request,
-) -> AdminMe:
+async def admin_get_me(request: Request, ) -> AdminMe:
     usecase = request.app.state.injector.get(GetAdminMeUsecaseInterface)
     me = request.user
     me = usecase.handle(me.id)

@@ -3,4 +3,7 @@ from .base_repository import BaseRepository
 
 
 class {{ .Name.Singular.Title }}Repository(BaseRepository):
-    model = {{ .Name.Singular.Title }}
+
+    @property
+    def model(self):
+        return {{ .Name.Singular.Title }}

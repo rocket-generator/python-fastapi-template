@@ -57,7 +57,9 @@ class AdminUserService(AdminUserServiceInterface):
     def count_admin_users(self) -> int:
         return self._admin_user_repository.count()
 
-    def get_admin_users(self, offset: int = 0, limit: int = 20) -> List[AdminUser]:
+    def get_admin_users(self,
+                        offset: int = 0,
+                        limit: int = 20) -> List[AdminUser]:
         return self._admin_user_repository.list(offset=offset, limit=limit)
 
     def get_admin_user_by_id(self, admin_user_id: str) -> Optional[AdminUser]:
@@ -75,3 +77,6 @@ class AdminUserService(AdminUserServiceInterface):
         updated_admin_user = self._admin_user_repository.update(
             admin_user_id, data)
         return updated_admin_user
+
+    def delete_admin_user(self, admin_user_id: str) -> bool:
+        raise NotImplementedError

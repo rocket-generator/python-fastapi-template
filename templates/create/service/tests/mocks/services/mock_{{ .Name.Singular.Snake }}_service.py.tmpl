@@ -1,10 +1,8 @@
-from typing import Optional, Tuple
+from typing import Optional, Tuple, List
+
+from app.interfaces.services.{{ .Name.Singular.Snake }}_service_interface import {{ .Name.Singular.Title }}ServiceInterface
 
 {{- if ne .RelatedModels nil }}
-{{- range .RelatedModels}}
-from app.interfaces.services.{{ .Singular.Snake }}_service_interface import {{ .Singular.Title }}ServiceInterface
-{{- end }}
-
 {{- range .RelatedModels}}
 from app.models.{{ .Singular.Snake }} import {{ .Singular.Title }}
 {{- end }}

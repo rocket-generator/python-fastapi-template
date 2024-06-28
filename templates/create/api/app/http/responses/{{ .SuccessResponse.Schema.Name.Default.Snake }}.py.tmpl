@@ -11,19 +11,19 @@ from .{{ .SuccessResponse.Schema.Name.Singular.Snake }} import {{ .SuccessRespon
 
 class {{ .SuccessResponse.Schema.Name.Default.Title }}(BaseModel):
 {{- range .SuccessResponse.Schema.Properties}}
-    {{ .Name.Original }}: {{ .Type }}
+    {{ .Name.Original }}: {{ .CodeType }}
 {{- end}}
 {{- if .SuccessResponse.IsList }}
 
-    @classmate
-    def from_model(cls, data: Model, count: int) -> '{{ .SuccessResponse.Schema.Name.Default.Title }}':
+    @classmethod
+    def from_model(cls, data: [Model], count: int) -> '{{ .SuccessResponse.Schema.Name.Default.Title }}':
         data = [{{ .SuccessResponse.Schema.Name.Singular.Title }}.from_model(model) for model in data]
         return cls(data=data, count=count)
 {{- else }}
 {{- if ne .TargetModel nil }}
 
-    @classmate
+    @classmethod
     def from_model(cls, model: Model) -> '{{ .SuccessResponse.Schema.Name.Default.Title }}':
-        return cls(**model.dict())
+        return cls(**model.model_dump())
 {{- end }}
 {{- end }}

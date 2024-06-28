@@ -21,7 +21,7 @@ router = APIRouter(
 )
 
 
-@router.get("{{ .Path }}")
+@router.{{ .Method.Snake }}("{{ .Path }}")
 @requires([""])
 async def {{ .Method.Snake }}_{{ .PathName.Default.Snake }}(
     request: Request,
@@ -38,7 +38,6 @@ async def {{ .Method.Snake }}_{{ .PathName.Default.Snake }}(
 {{- end }}
 {{- end }}
 {{- if ne .RequestSchemaName.Default.Title "" }}
-    request: Request,
     request_data: {{ .RequestSchemaName.Default.Title }}
 {{- end }}
 
@@ -63,7 +62,7 @@ async def {{ .Method.Snake }}_{{ .PathName.Default.Snake }}(
     return {{ .SuccessResponse.Schema.Name.Default.Title }}.from_model(success)
 {{- end }}
 {{- else }}
-    response = usecase.handle()
+    success = usecase.handle()
     return {{ .SuccessResponse.Schema.Name.Default.Title }}.from_model(success)
 {{- end }}
 

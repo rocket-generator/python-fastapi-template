@@ -51,5 +51,5 @@ def _setup_router(app: FastAPI, injector: Injector) -> FastAPI:
     app.include_router(admin_post_auth_signin_controller)
     app.include_router(admin_get_me_controller)
     app.include_router(admin_put_me_controller)
-# /* [INCLUDE_CONTROLLERS] */
+    # /* [INCLUDE_CONTROLLERS] */
     return app

@@ -1,17 +1,18 @@
-from sqlalchemy import TIMESTAMP, BigInteger, Column, Integer, String, event
+from sqlalchemy import TIMESTAMP, BigInteger, Column, Integer, String, event, Uuid
+from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func, text
+
 {{- if .Authenticatable }}
 from starlette.authentication import BaseUser
 {{- end }}
 
 from ..libraries import Hash
 from .base import Base
-from .types import UUID
 
 
 class {{ .Name.Singular.Title }}(Base{{ if .Authenticatable }}, BaseUser{{ end }}):
     __tablename__ = '{{ .Name.Original }}'
-    id = Column(UUID,
+    id = Column(Uuid,
                 primary_key=True,
                 server_default=text('gen_random_uuid()'))
 

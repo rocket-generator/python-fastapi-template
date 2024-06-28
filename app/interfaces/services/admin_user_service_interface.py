@@ -25,7 +25,9 @@ class AdminUserServiceInterface(metaclass=ABCMeta):
         raise NotImplementedError
 
     @abstractmethod
-    def get_admin_users(self, offset: int = 0, limit: int = 20) -> List[AdminUser]:
+    def get_admin_users(self,
+                        offset: int = 0,
+                        limit: int = 20) -> List[AdminUser]:
         raise NotImplementedError
 
     @abstractmethod
