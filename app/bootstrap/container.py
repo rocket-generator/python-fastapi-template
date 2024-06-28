@@ -3,23 +3,32 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
 from ..config import Config, config
-from ..http.middlewares.auth.admin_authentication_backend import \
-    AdminAuthenticationBackend
+from ..http.middlewares.auth.admin_authentication_backend import AdminAuthenticationBackend
+
 from ..interfaces.libraries.access_token_interface import AccessTokenInterface
 from ..interfaces.libraries.hash_interface import HashInterface
-from ..interfaces.repositories.admin_user_repository_interface import \
-    AdminUserRepositoryInterface
-from ..interfaces.services.admin_user_service_interface import \
-    AdminUserServiceInterface
-from ..interfaces.usecases.get_admin_me_usecase_interface import \
-    GetAdminMeUsecaseInterface
-from ..interfaces.usecases.put_admin_me_usecase_interface import \
-    PutAdminMeUsecaseInterface
-from ..libraries import AccessToken, Hash
+
+from ..interfaces.repositories.admin_user_repository_interface import AdminUserRepositoryInterface
+# /* [IMPORT_REPOSITORY_INTERFACES] */
+
+from ..interfaces.services.admin_user_service_interface import AdminUserServiceInterface
+# /* [IMPORT_SERVER_INTERFACES] */
+
+from ..interfaces.usecases.get_admin_me_usecase_interface import GetAdminMeUsecaseInterface
+from ..interfaces.usecases.put_admin_me_usecase_interface import PutAdminMeUsecaseInterface
+# /* [IMPORT_USECASE_INTERFACES] */
+
 from ..repositories.admin_user_repository import AdminUserRepository
+# /* [IMPORT_REPOSITORIES] */
+
 from ..services.admin_user_service import AdminUserService
+# /* [IMPORT_SERVERS] */
+
 from ..usecases.get_admin_me_usecase import GetAdminMeUsecase
 from ..usecases.put_admin_me_usecase import PutAdminMeUsecase
+# /* [IMPORT_USECASES] */
+
+from ..libraries import AccessToken, Hash
 
 
 def build_container() -> Injector:

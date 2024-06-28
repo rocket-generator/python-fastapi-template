@@ -1,0 +1,1 @@
+from ..services.{{ .Name.Singular.Snake }}_service import {{ .Name.Singular.Title }}Service

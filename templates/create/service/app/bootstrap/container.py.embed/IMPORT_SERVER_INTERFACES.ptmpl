@@ -1,0 +1,1 @@
+from ..interfaces.services.{{ .Name.Singular.Snake }}_service_interface import {{ .Name.Singular.Title }}ServiceInterface

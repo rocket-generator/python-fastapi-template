@@ -1,0 +1,1 @@
+from ..interfaces.usecases.{{ .Method.Snake }}_{{ .PathName.Default.Snake }}_usecase_interface import {{ .Method.Title }}{{ .PathName.Default.Title }}UsecaseInterface

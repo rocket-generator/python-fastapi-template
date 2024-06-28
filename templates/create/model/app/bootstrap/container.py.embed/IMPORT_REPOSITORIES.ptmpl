@@ -1,0 +1,1 @@
+from ..repositories.{{ .Name.Singular.Snake }}_repository import {{ .Name.Singular.Title }}Repository

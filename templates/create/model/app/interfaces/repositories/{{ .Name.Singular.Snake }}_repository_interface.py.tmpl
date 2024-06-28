@@ -1,0 +1,8 @@
+from abc import ABCMeta, abstractmethod
+
+from ...models.{{ .Name.Singular.Snake }} import {{ .Name.Singular.Title }}
+from .base_repository_interface import BaseRepositoryInterface
+
+
+class {{ .Name.Singular.Title }}RepositoryInterface(BaseRepositoryInterface, metaclass=ABCMeta):
+    pass

@@ -1,0 +1,1 @@
+from ..usecases.{{ .Method.Snake }}_{{ .PathName.Default.Snake }}_usecase import {{ .Method.Title }}{{ .PathName.Default.Title }}Usecase

@@ -7,7 +7,7 @@ from ..config import Config
 from ..exceptions import ClientSideError
 from ..interfaces.services.{{ .Name.Singular.Snake }}_service_interface import \
     {{ .Name.Singular.Title }}ServiceInterface
-from ..libraries import JWT, Hash
+from ..libraries import AccessToken, Hash
 
 {{- if ne .RelatedModels nil }}
 {{- range .RelatedModels}}
@@ -19,10 +19,12 @@ from ..repositories.{{ .Singular.Snake }}_repository import {{ .Singular.Title }
 {{- end }}
 {{- end }}
 
+
 class {{ .Name.Singular.Title }}Service({{ .Name.Singular.Title }}ServiceInterface):
 
     @inject
     def __init__(self,
+
 {{- if ne .RelatedModels nil }}
 {{- range .RelatedModels}}
                 {{ .Singular.Snake }}_repository: {{ .Singular.Title }}Repository,
@@ -53,7 +55,7 @@ class {{ .Name.Singular.Title }}Service({{ .Name.Singular.Title }}ServiceInterfa
     def get_{{ .Plural.Snake }}(self, offset: int = 0, limit: int = 20) -> List[{{ .Singular.Title }}]:
         return self._{{ .Singular.Snake }}_repository.list(offset=offset, limit=limit)
 
-    def get_{{ .Singular.Snake }}_by_id(self, admin_user_id: str) -> Optional[{{ .Singular.Title }}]:
+    def get_{{ .Singular.Snake }}_by_id(self, {{ .Singular.Snake }}_id: str) -> Optional[{{ .Singular.Title }}]:
         return self._{{ .Singular.Snake }}_repository.get_by_id({{ .Singular.Snake }}_id)
 
     def create_{{ .Singular.Snake }}(self, data: dict) -> Optional[{{ .Singular.Title }}]:
