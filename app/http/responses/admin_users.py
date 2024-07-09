@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
-from .admin_user import AdminUser
 from ...models.admin_user import AdminUser as Model
+from .admin_user import AdminUser
 
 
 class AdminUsers(BaseModel):

@@ -12,11 +12,11 @@ class {{ .Name.Singular.Title }}ServiceInterface(metaclass=ABCMeta):
 {{- if ne .RelatedModels nil }}
 {{- range .RelatedModels}}
     @abstractmethod
-    def count_{{ .Plural.Snake }}(self) -> int:
+    def count_{{ .Plural.Snake }}(self, _filter: Optional[dict] = None) -> int:
         raise NotImplementedError
 
     @abstractmethod
-    def get_{{ .Plural.Snake }}(self, offset: int = 0, limit: int = 20) -> List[{{ .Singular.Title }}]:
+    def get_{{ .Plural.Snake }}(self, offset: int = 0, limit: int = 20, _filter: Optional[dict] = None) -> List[{{ .Singular.Title }}]:
         raise NotImplementedError
 
     @abstractmethod

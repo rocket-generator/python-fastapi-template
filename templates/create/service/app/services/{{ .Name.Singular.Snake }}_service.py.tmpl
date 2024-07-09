@@ -80,11 +80,11 @@ class {{ .Name.Singular.Title }}Service({{ .Name.Singular.Title }}ServiceInterfa
 
 {{- if ne .RelatedModels nil }}
 {{- range .RelatedModels}}
-    def count_{{ .Plural.Snake }}(self) -> int:
-        return self._{{ .Singular.Snake }}_repository.count()
+    def count_{{ .Plural.Snake }}(self, _filter: Optional[dict] = None) -> int:
+        return self._{{ .Singular.Snake }}_repository.count_by_filter(_filter=_filter)
 
-    def get_{{ .Plural.Snake }}(self, offset: int = 0, limit: int = 20) -> List[{{ .Singular.Title }}]:
-        return self._{{ .Singular.Snake }}_repository.list(offset=offset, limit=limit)
+    def get_{{ .Plural.Snake }}(self, offset: int = 0, limit: int = 20, _filter: Optional[dict] = None) -> List[{{ .Singular.Title }}]:
+        return self._{{ .Singular.Snake }}_repository.list_by_filter(_filter=_filter, offset=offset, limit=limit)
 
     def get_{{ .Singular.Snake }}_by_id(self, {{ .Singular.Snake }}_id: str) -> Optional[{{ .Singular.Title }}]:
         return self._{{ .Singular.Snake }}_repository.get_by_id({{ .Singular.Snake }}_id)

@@ -13,9 +13,11 @@ from app.http.controllers.admin_put_me_controller import \
 from app.http.controllers.health_controller import router as health_controller
 from app.http.middlewares.auth.admin_authentication_backend import \
     AdminAuthenticationBackend
-# /* [IMPORT_CONTROLLERS] */
 
 from .container import build_container
+
+# /* [IMPORT_CONTROLLERS] */
+
 
 
 def create_app(environment: str = 'local'):

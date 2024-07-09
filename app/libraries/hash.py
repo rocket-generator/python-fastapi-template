@@ -1,9 +1,14 @@
+from logging import Logger
+
 import bcrypt
 
 from app.interfaces.libraries.hash_interface import HashInterface
 
 
 class Hash(HashInterface):
+
+    def __init__(self, logger: Logger):
+        self._logger = logger
 
     @staticmethod
     def generate_hash(key: str) -> str:

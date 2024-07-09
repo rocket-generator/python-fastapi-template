@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta, timezone
+from logging import Logger
 from typing import Optional
 
 from jose import exceptions, jwt
@@ -10,6 +11,9 @@ from app.interfaces.libraries.access_token_interface import \
 
 
 class AccessToken(AccessTokenInterface):
+
+    def __init__(self, logger: Logger):
+        self._logger = logger
 
     @staticmethod
     def create_access_token(data: dict,

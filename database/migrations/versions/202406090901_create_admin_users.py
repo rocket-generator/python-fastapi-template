@@ -9,7 +9,6 @@ from typing import Sequence, Union
 
 from alembic import op
 import sqlalchemy
-from app.models.types import UUID
 from sqlalchemy.sql import func, text
 
 
@@ -25,7 +24,7 @@ depends_on: Union[str, Sequence[str], None] = None
 def upgrade() -> None:
     op.create_table(
         'admin_users',
-        sqlalchemy.Column('id', UUID, primary_key=True, server_default=text('gen_random_uuid()')),
+        sqlalchemy.Column('id', sqlalchemy.Uuid, primary_key=True, server_default=text('gen_random_uuid()')),
         sqlalchemy.Column('name', sqlalchemy.Text, nullable=False),
         sqlalchemy.Column('email', sqlalchemy.Text, nullable=False),
         sqlalchemy.Column('password', sqlalchemy.Text, nullable=False),

@@ -14,6 +14,10 @@ class BaseRepositoryInterface(metaclass=ABCMeta):
         raise NotImplementedError
 
     @abstractmethod
+    def count_by_filter(self, _filter: dict) -> int:
+        raise NotImplementedError
+
+    @abstractmethod
     def list(self, offset: int = 0, limit: int = 20) -> List[model]:
         raise NotImplementedError
 

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Request, Query
+from fastapi import APIRouter, HTTPException, Query, Request
 from starlette.authentication import requires
 
 from app.http.requests.admin_sign_in import AdminSignIn

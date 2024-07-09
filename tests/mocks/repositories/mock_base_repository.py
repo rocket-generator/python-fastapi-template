@@ -20,14 +20,24 @@ class MockBaseRepository(BaseRepositoryInterface):
     def count(self) -> int:
         return 1
 
-    def list(self, offset: int = 0, limit: int = 20) -> List[model]:
+    def count_by_filter(self, _filter: dict) -> int:
+        return 1
+
+    def list(self,
+             offset: int = 0,
+             limit: int = 20,
+             order: str = 'id',
+             direction: str = 'asc') -> List[model]:
+
         model = self.generate_model()
         return [model]
 
     def list_by_filter(self,
                        _filter: dict,
                        offset: int = 0,
-                       limit: int = 20) -> List[model]:
+                       limit: int = 20,
+                       order: str = 'id',
+                       direction: str = 'asc') -> List[model]:
         return self.list(offset, limit)
 
     def get_by_id(self, _id: str) -> Optional[Any]:

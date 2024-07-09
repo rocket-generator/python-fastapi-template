@@ -1,5 +1,7 @@
-from fastapi import APIRouter, HTTPException, Request, Query
 from typing import Optional
+
+from fastapi import APIRouter, HTTPException, Query, Request
+
 from ...services.admin_user_service import AdminUserService
 from ..responses.status import Status
 

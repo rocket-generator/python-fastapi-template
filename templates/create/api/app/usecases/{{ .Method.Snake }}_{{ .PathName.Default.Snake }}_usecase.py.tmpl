@@ -25,7 +25,7 @@ class {{ .Method.Title }}{{ .PathName.Default.Title }}Usecase({{ .Method.Title }
     def handle(self, offset: int = 0, limit: int = 20) -> Tuple[List[{{ .SuccessResponse.Schema.Name.Singular.Title }}], int]:
         count = self.{{ .TargetModel.Singular.Snake }}_service.count_{{ .TargetModel.Plural.Snake }}()
         models = self.{{ .TargetModel.Singular.Snake }}_service.get_{{ .TargetModel.Plural.Snake }}(offset, limit)
-        return (models, count)
+        return models, count
 {{- else if eq .RequestSubType "get" }}
     def handle(self, _id: str) -> Optional[{{ .SuccessResponse.Schema.Name.Singular.Title }}]:
         return self.{{ .TargetModel.Singular.Snake }}_service.get_{{ .TargetModel.Singular.Snake }}_by_id(_id)

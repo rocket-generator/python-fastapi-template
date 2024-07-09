@@ -21,3 +21,4 @@ class MockAdminUserRepository(AdminUserRepositoryInterface,
 
     def get_by_email(self, email: str) -> AdminUser | None:
         return self.generate_model(data={"email": email})
+

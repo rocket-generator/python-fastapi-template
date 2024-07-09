@@ -52,10 +52,10 @@ async def {{ .Method.Snake }}_{{ .PathName.Default.Snake }}(
     model = usecase.handle(id)
     return {{ .SuccessResponse.Schema.Name.Default.Title }}.from_model(model)
 {{- else if eq .RequestSubType "create" }}
-    model = usecase.handle(request_data.dict())
+    model = usecase.handle(request_data..model_dump(exclude_none=True))
     return {{ .SuccessResponse.Schema.Name.Default.Title }}.from_model(model)
 {{- else if eq .RequestSubType "update" }}
-    model = usecase.handle(id, request_data.dict())
+    model = usecase.handle(id, request_data..model_dump(exclude_none=True))
     return {{ .SuccessResponse.Schema.Name.Default.Title }}.from_model(model)
 {{- else if eq .RequestSubType "delete" }}
     success = usecase.handle(id)

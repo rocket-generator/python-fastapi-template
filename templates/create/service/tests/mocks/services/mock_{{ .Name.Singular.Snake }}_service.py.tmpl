@@ -36,7 +36,7 @@ class Mock{{ .Name.Singular.Title }}Service({{ .Name.Singular.Title }}ServiceInt
         return self.generate_{{ .Singular.Snake }}({{ .Singular.Snake }}_id)
 
     def create_{{ .Singular.Snake }}(self, data: dict) -> Optional[{{ .Singular.Title }}]:
-        raise self.generate_{{ .Singular.Snake }}()
+        return self.generate_{{ .Singular.Snake }}()
 
     def update_{{ .Singular.Snake }}(self, {{ .Singular.Snake }}_id: str,
                           data: dict) -> Optional[{{ .Singular.Title }}]:

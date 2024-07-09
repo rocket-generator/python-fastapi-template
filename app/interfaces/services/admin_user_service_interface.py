@@ -1,5 +1,5 @@
 from abc import ABCMeta, abstractmethod
-from typing import Optional, Tuple, List
+from typing import List, Optional, Tuple
 
 from ...models.admin_user import AdminUser
 

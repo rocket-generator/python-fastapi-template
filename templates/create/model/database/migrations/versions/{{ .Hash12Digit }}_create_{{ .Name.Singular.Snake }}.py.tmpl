@@ -9,7 +9,6 @@ from typing import Sequence, Union
 
 from alembic import op
 import sqlalchemy
-from app.models.types import UUID
 from sqlalchemy.sql import func, text
 
 
@@ -27,7 +26,7 @@ def upgrade() -> None:
         '{{ .Name.Singular.Snake }}',
         {{- range .Columns}}
         {{- if .Primary }}
-        sqlalchemy.Column('{{ .Name.Original }}', UUID, primary_key=True, server_default=text('gen_random_uuid()')),
+        sqlalchemy.Column('{{ .Name.Original }}', sqlalchemy.Uiid, primary_key=True, server_default=text('gen_random_uuid()')),
         {{- else }}
         sqlalchemy.Column('{{ .Name.Original }}', sqlalchemy.{{ .ObjectType }}, nullable={{ if .Nullable }}True{{ else }}False{{ end }}{{ if ne .DefaultValue "" }}, default="{{ .DefaultValue }}"{{ end }}),
         {{- end }}

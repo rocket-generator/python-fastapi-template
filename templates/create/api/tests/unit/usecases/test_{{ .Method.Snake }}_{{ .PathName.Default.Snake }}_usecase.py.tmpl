@@ -1,3 +1,5 @@
+from faker import Faker
+
 from app.usecases.{{ .Method.Snake }}_{{ .PathName.Default.Snake }}_usecase import {{ .Method.Title }}{{ .PathName.Default.Title }}Usecase
 {{- if ne .TargetModel nil }}
 from tests.mocks.services.mock_{{ .TargetModel.Singular.Snake }}_service import Mock{{ .TargetModel.Singular.Title }}Service
@@ -8,19 +10,30 @@ def test_{{ .Method.Snake }}_{{ .PathName.Default.Snake }}_usecase():
     usecase = {{ .Method.Title }}{{ .PathName.Default.Title }}Usecase({{ if ne .TargetModel nil }}Mock{{ .TargetModel.Singular.Title }}Service(){{ end }})
 {{- if eq .RequestType "crud" }}
 {{- if eq .RequestSubType "index" }}
-    models = usecase.handle(offset=0, limit=20)
+    models, count = usecase.handle(offset=0, limit=20)
 
+    assert isinstance(count, int)
+    assert isinstance(models, list)
 {{- else if eq .RequestSubType "get" }}
-    model = usecase.handle("acc57e72-860a-5efa-a5fe-f7bbf745c71f")
+    faker_instance = Faker()
+    _id = faker_instance.uuid4()
+    model = usecase.handle(_id)
+
     assert model is not None
+    assert str(model.id) == _id
 {{- else if eq .RequestSubType "create" }}
+
     model = usecase.handle({})
     assert model is not None
 {{- else if eq .RequestSubType "update" }}
-    model = usecase.handle("acc57e72-860a-5efa-a5fe-f7bbf745c71f", {})
+    faker_instance = Faker()
+    model = usecase.handle(faker_instance.uuid4(), {})
+
     assert model is not None
 {{- else if eq .Method.Camel "delete" }}
-    success = usecase.handle("acc57e72-860a-5efa-a5fe-f7bbf745c71f")
+    faker_instance = Faker()
+    success = usecase.handle(faker_instance.uuid4())
+
     assert success is True
 {{- end }}
 {{- else }}

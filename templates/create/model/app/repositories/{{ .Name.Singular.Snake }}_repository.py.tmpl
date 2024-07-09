@@ -1,8 +1,9 @@
+from ..interfaces.repositories.{{ .Name.Singular.Snake }}_repository_interface import {{ .Name.Singular.Title }}RepositoryInterface
 from ..models.{{ .Name.Singular.Snake }} import {{ .Name.Singular.Title }}
 from .base_repository import BaseRepository
 
 
-class {{ .Name.Singular.Title }}Repository(BaseRepository):
+class {{ .Name.Singular.Title }}Repository(BaseRepository, {{ .Name.Singular.Title }}RepositoryInterface):
 
     @property
     def model(self):
